@@ -1,16 +1,36 @@
-# flutter_crud_auth
+# CCA Vijayapura
 
-A new Flutter project.
+## Prerequisite
+```
+node & yarn,
+flutter,
+android sdk,
+java,
+firebase-cli & keychain registration,
+```
+## Check setup
+`flutter doctor -v`
 
-## Getting Started
+https://firebase.google.com/docs/flutter/setup?platform=android
+# sign app for the google authentication
+## Google
+```
+cd android/app/google-services.json
+./gradlew signingReport
+```
+https://developers.google.com/android/guides/client-auth  
 
-This project is a starting point for a Flutter application.
+## FB
+https://facebook.meedu.app/docs/4.x.x/android
+https://console.firebase.google.com/project/crud-eb4cc/authentication/providers
+https://developers.facebook.com/docs/facebook-login/android/?locale=en
+https://developers.facebook.com/apps/?show_reminder=true
+keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## install modules
+`yarn`
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## run dev server
+`yarn start`
+

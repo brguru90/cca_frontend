@@ -1,0 +1,16 @@
+{
+  "name": "flutter_frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "clean": "flutter clean ",
+    "get": "flutter packages get",
+    "upgrade": "flutter packages upgrade",
+    "install":"npm-run-all --serial --continue-on-error clean get",
+    "start": "flutter run"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}

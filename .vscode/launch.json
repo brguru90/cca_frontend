@@ -1,0 +1,41 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "cca (debug)",
+      "cwd": "",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "preLaunchTask": "connect_mobile",
+    },
+    {
+      "name": "cca (debug using remote server)",
+      "cwd": "",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "preLaunchTask": "connect_mobile",
+      "args": ["--dart-define", "RELEASE_MODE=true"]
+    },
+    {
+      "name": "cca (profile mode)",
+      "cwd": "",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "args": ["--no-sound-null-safety", "--dart-define", "RELEASE_MODE=true"]
+    },
+    {
+      "name": "cca (release mode)",
+      "cwd": "",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": ["--dart-define", "RELEASE_MODE=true"]
+    },
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "564585822015",
+    "project_id": "cca-vijayapura",
+    "storage_bucket": "cca-vijayapura.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564585822015:android:915a48bc1bf5fd9e60858a",
+        "android_client_info": {
+          "package_name": "com.example.cca_vijayapura"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564585822015-bvml4fi59a54305rq0nkgciink8hbcqu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cca_vijayapura",
+            "certificate_hash": "1db63fffee48c56cfc46c5b8ce57caccacbf1d6d"
+          }
+        },
+        {
+          "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZhzn6vXV0E8aquJBNoEWepPOVWijOzzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "564585822015-afl562tse4kgdh4nt8t6jgnlav4pq052.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterCrudAuth"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564585822015:android:e418a9fcaee725a660858a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_crud_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZhzn6vXV0E8aquJBNoEWepPOVWijOzzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "564585822015-afl562tse4kgdh4nt8t6jgnlav4pq052.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterCrudAuth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

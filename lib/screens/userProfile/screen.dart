@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cca_vijayapura/services/http_request.dart';
+import 'package:cca_vijayapura/services/secure_store.dart';
+import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_crud_auth/services/http_request.dart';
-import './userProfileData/screen.dart';
+
 import './userActiveSessions/screen.dart';
+import './userProfileData/screen.dart';
 import './userSettings/screen.dart';
-import 'package:flutter_crud_auth/services/temp_store.dart';
-import 'package:flutter_crud_auth/services/secure_store.dart';
 
 class UserProfile extends StatefulWidget {
   final Map<String, String> env_values;
@@ -23,7 +24,7 @@ class _UserProfileState extends State<UserProfile> {
   int currentTab = 0;
   late Timer timerIntervalToCheckLoginStatus;
 
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void checkExistingSession() {
     // if (pendingRequests["login_status"] != null) {
@@ -43,7 +44,7 @@ class _UserProfileState extends State<UserProfile> {
     Completer c = Completer();
     exeFetch(
         uri: "/api/user/",
-        navigateToIfNotAllowed: () =>
+        navigateToIfNotAllowed: (statusCode) =>
             Navigator.pushReplacementNamed(context, "/")).then((data) {
       setState(() {
         profileData = jsonDecode(data["body"])["data"];
@@ -97,12 +98,12 @@ class _UserProfileState extends State<UserProfile> {
                 children: [
                   Row(
                     children: [
-                      Text("Email:",
-                          style: const TextStyle(
+                      const Text("Email:",
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                           )),
-                      SizedBox(
+                      const SizedBox(
                         width: 20.0,
                       ),
                       Text(
@@ -119,12 +120,12 @@ class _UserProfileState extends State<UserProfile> {
                   ),
                   Row(
                     children: [
-                      Text("UUID:",
-                          style: const TextStyle(
+                      const Text("UUID:",
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                           )),
-                      SizedBox(
+                      const SizedBox(
                         width: 20.0,
                       ),
                       Expanded(
@@ -152,7 +153,7 @@ class _UserProfileState extends State<UserProfile> {
                   _scaffoldKey.currentState!.openEndDrawer();
                 },
                 child: ListTile(
-                  leading: Icon(Icons.account_circle),
+                  leading: const Icon(Icons.account_circle),
                   title: Text(
                     "Profile",
                     style: TextStyle(
@@ -171,7 +172,7 @@ class _UserProfileState extends State<UserProfile> {
                   _scaffoldKey.currentState!.openEndDrawer();
                 },
                 child: ListTile(
-                  leading: Icon(Icons.list_alt),
+                  leading: const Icon(Icons.list_alt),
                   title: Text(
                     "Active sessions",
                     style: TextStyle(
@@ -190,7 +191,7 @@ class _UserProfileState extends State<UserProfile> {
                   _scaffoldKey.currentState!.openEndDrawer();
                 },
                 child: ListTile(
-                  leading: Icon(Icons.settings),
+                  leading: const Icon(Icons.settings),
                   title: Text(
                     "Settings",
                     style: TextStyle(
@@ -219,10 +220,10 @@ class _UserProfileState extends State<UserProfile> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("User profile"),
+            const Text("User profile"),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.red[400],
+                  backgroundColor: Colors.red[400],
                 ),
                 onPressed: logout,
                 child: Row(

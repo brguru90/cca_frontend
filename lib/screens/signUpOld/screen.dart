@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:flutter_crud_auth/services/http_request.dart';
-import 'package:flutter_crud_auth/sharedComponents/toastMessages/toastMessage.dart';
+import 'package:cca_vijayapura/services/http_request.dart';
+import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
 
 class SignUP extends StatefulWidget {
   final Map<String, String> env_values;

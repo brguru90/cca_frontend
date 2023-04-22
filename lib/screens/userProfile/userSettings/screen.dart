@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_crud_auth/sharedComponents/toastMessages/toastMessage.dart';
-import 'package:flutter_crud_auth/services/http_request.dart';
+import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
+import 'package:cca_vijayapura/services/http_request.dart';
 
 class UserSettings extends StatefulWidget {
   const UserSettings({Key? key}) : super(key: key);

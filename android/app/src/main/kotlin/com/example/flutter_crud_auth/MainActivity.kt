@@ -1,4 +1,4 @@
-package com.example.flutter_crud_auth
+package com.example.cca_vijayapura
 
 import io.flutter.embedding.android.FlutterActivity
 

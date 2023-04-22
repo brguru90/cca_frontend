@@ -1,11 +1,9 @@
-import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:io';
 
-import 'package:flutter_crud_auth/services/secure_store.dart';
-import 'package:flutter_crud_auth/services/temp_store.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:cca_vijayapura/services/secure_store.dart';
+import 'package:cca_vijayapura/services/temp_store.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Future<Map<dynamic, dynamic>> exeFetch(
 //     {required String uri,
@@ -57,17 +55,14 @@ import 'package:device_info_plus/device_info_plus.dart';
 Future<Map<dynamic, dynamic>> exeFetch({
   required String uri,
   method = "get",
-  body = null,
+  body,
   Map<String, dynamic> header = const {
     "Content-Type": "application/json",
   },
-  navigateToIfNotAllowed = null,
-  getRequest = null,
+  Function(int? statusCode)? navigateToIfNotAllowed,
+  getRequest,
 }) async {
-  if (navigateToIfNotAllowed == null) {
-    navigateToIfNotAllowed = () {};
-  }
-
+  navigateToIfNotAllowed ??= (a) {};
   Future<Map<dynamic, dynamic>> future;
 
   if (uri.startsWith("/")) {
@@ -76,23 +71,22 @@ Future<Map<dynamic, dynamic>> exeFetch({
   var client = HttpClient();
   late HttpClientRequest request;
 
+  Uri FullURI = Uri.parse(
+      """${dotenv.env["SERVER_PROTOCOL"]}://${dotenv.env["SERVER_HOST"]}:${dotenv.env["SERVER_PORT"]}/$uri""");
+
   try {
     switch (method) {
       case "post":
-        request = await client.post(dotenv.env["SERVER_HOST"].toString(),
-            int.parse(dotenv.env["SERVER_PORT"].toString()), uri);
+        request = await client.postUrl(FullURI);
         break;
       case "put":
-        request = await client.put(dotenv.env["SERVER_HOST"].toString(),
-            int.parse(dotenv.env["SERVER_PORT"].toString()), uri);
+        request = await client.putUrl(FullURI);
         break;
       case "delete":
-        request = await client.delete(dotenv.env["SERVER_HOST"].toString(),
-            int.parse(dotenv.env["SERVER_PORT"].toString()), uri);
+        request = await client.deleteUrl(FullURI);
         break;
       default:
-        request = await client.get(dotenv.env["SERVER_HOST"].toString(),
-            int.parse(dotenv.env["SERVER_PORT"].toString()), uri);
+        request = await client.getUrl(FullURI);
     }
     // ------------ constructing request --------------------
 
@@ -102,16 +96,16 @@ Future<Map<dynamic, dynamic>> exeFetch({
 
     String ua = request.headers.value("user-agent") ?? "";
     ua = ua + "," + jsonEncode(temp_store["deviceInfo"]);
-    request.headers..set("user-agent", ua);
+    request.headers.set("user-agent", ua);
 
     String cookies =
         temp_store["cookies"] ?? await storage.read(key: "cookies") ?? "";
     if (cookies != "") {
       temp_store["cookies"] = cookies;
-      List cookies_obj = jsonDecode(cookies);
-      cookies_obj.forEach((cookie) {
+      List cookiesObj = jsonDecode(cookies);
+      for (var cookie in cookiesObj) {
         request.cookies.add(Cookie.fromSetCookieValue(cookie));
-      });
+      }
     }
 
     if (temp_store["csrf_token"] != null) {
@@ -137,7 +131,7 @@ Future<Map<dynamic, dynamic>> exeFetch({
           response.headers.value("csrf_token").toString();
     }
 
-    if (response.cookies.length > 0) {
+    if (response.cookies.isNotEmpty) {
       String _cookies = jsonEncode(
           response.cookies.map((cookie) => cookie.toString()).toList());
       await storage.write(key: "cookies", value: _cookies);
@@ -155,22 +149,25 @@ Future<Map<dynamic, dynamic>> exeFetch({
       //   "body":stringData,
       //   "navigate":navigateToIfNotAllowed()
       // }));
-      future = Future.error(
-          Map.from({"body": stringData, "navigate": navigateToIfNotAllowed()}));
+      future = Future.error(Map.from({
+        "status_code": response.statusCode,
+        "body": stringData,
+        "navigate": navigateToIfNotAllowed(response.statusCode)
+      }));
     } else {
       future = Future.error(Map.from({
-        "err": response.statusCode,
+        "status_code": response.statusCode,
         "body": stringData,
-        "navigate": navigateToIfNotAllowed()
+        "navigate": navigateToIfNotAllowed(response.statusCode)
       }));
     }
-  } on HttpException catch (e, stacktrace) {
-    print(e);
+  } on HttpException catch (e) {
+    print("HttpException = $e");
     if (e.message.contains("Request has been aborted")) {
       future = Future<Map>.value({"body": null});
     } else {
       future = Future.error(
-          Map.from({"body": "{}", "navigate": navigateToIfNotAllowed()}));
+          Map.from({"body": "{}", "navigate": navigateToIfNotAllowed(-2)}));
     }
   } catch (e, stacktrace) {
     print("Exception:");
@@ -178,7 +175,7 @@ Future<Map<dynamic, dynamic>> exeFetch({
     print("stacktrace:");
     print(stacktrace);
     future = Future.error(
-        Map.from({"body": " {}", "navigate": navigateToIfNotAllowed()}));
+        Map.from({"body": " {}", "navigate": navigateToIfNotAllowed(-1)}));
   } finally {
     client.close();
   }

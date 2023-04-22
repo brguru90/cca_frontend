@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(flutter_crud_auth LANGUAGES CXX)
+project(cca_vijayapura LANGUAGES CXX)
 
-set(BINARY_NAME "flutter_crud_auth")
+set(BINARY_NAME "cca_vijayapura")
 
 cmake_policy(SET CMP0063 NEW)
 

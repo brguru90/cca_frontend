@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_crud_auth/screens/landing/body.dart';
-import 'package:flutter_crud_auth/screens/landing/header.dart';
+import 'package:cca_vijayapura/screens/landing/body.dart';
+import 'package:cca_vijayapura/screens/landing/header.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cca_vijayapura/sharedComponents/orgBanner/widget.dart';
+import 'package:flutter/material.dart';
 
 class SocialAccountSignup extends StatefulWidget {
   const SocialAccountSignup({Key? key}) : super(key: key);
@@ -24,12 +24,19 @@ class _SocialAccountSignupState extends State<SocialAccountSignup> {
         // automaticallyImplyLeading: false,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            SizedBox(height: 20),
-            OrganizationBanner(),
-          ],
+      body: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Column(
+            children: const [
+              SizedBox(height: 40),
+              OrganizationBanner(),
+            ],
+          ),
         ),
       ),
     );

@@ -61,7 +61,7 @@ Widget WrapApp(Widget child) {
 }
 
 void main() async {
-  await loadENV();
+  await initialize();
   Map<String, String> envValues = dotenv.env;
   runApp(WrapApp(MaterialApp(
     initialRoute: "/",

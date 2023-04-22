@@ -1,0 +1,50 @@
+trigger:
+- None
+
+name: '1.0.$(Build.BuildId)'
+
+variables:
+- name: androidKeystoreKeyAlias
+  value: key
+
+jobs:
+- job: BuildAndroid
+  displayName: Build for Android
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: DownloadSecureFile@1
+    displayName: Get releaseKeyStore.jks
+    name: releaseKeyStore
+    inputs:
+      secureFile: 'releaseKeyStore.jks'
+  - pwsh: |
+      Write-Host "##vso[task.setvariable variable=keyAlias;]$(androidKeystoreKeyAlias)"
+      Write-Host "##vso[task.setvariable variable=keyPassword;]$(androidKeystoreKeyPassword)"
+      Write-Host "##vso[task.setvariable variable=storeFile;]$(releaseKeyStore.secureFilePath)"
+      Write-Host "##vso[task.setvariable variable=storePassword;]$(androidKeystorePassword)"
+    displayName: "set keystore environment variables"
+  - task: DownloadSecureFile@1
+    displayName: Get google-services.json
+    name: googleServicesJson
+    inputs:
+      secureFile: 'google-services.json'
+  - pwsh: Move-Item $(googleServicesJson.secureFilePath) android/app/ -Force
+    displayName: Override google-services.json
+  - task: FlutterInstall@0
+    displayName: Install Flutter
+    inputs:
+      channel: 'stable'
+      version: 'latest'
+  - task: FlutterBuild@0
+    displayName: Build App
+    inputs:
+      target: 'apk'
+      projectDirectory: '.'
+      buildName: '$(Build.BuildNumber)'
+  - task: PublishBuildArtifacts@1
+    displayName: Publish artifact
+    inputs:
+      PathtoPublish: '$(Build.Repository.LocalPath)/build/app/outputs/apk/release'
+      ArtifactName: 'apk'
+      publishLocation: 'Container'

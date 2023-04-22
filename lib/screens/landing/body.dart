@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:cca_vijayapura/services/social_authentication.dart';
+import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
 import 'package:cca_vijayapura/sharedState/state.dart';
 import 'package:flutter/material.dart';
@@ -83,12 +84,12 @@ class _LandingBodyState extends State<LandingBody> {
       setState(() {
         loading = false;
       });
-      Navigator.pushNamedAndRemoveUntil(
-          context, "/socialSignUp", (Route<dynamic> route) => false);
+      Navigator.pushNamed(context, "/socialSignUp");
     }).catchError((e) {
       setState(() {
         loading = false;
       });
+      shared_logger.e(e);
       ToastMessage.error(const JsonEncoder().convert(e));
     });
   }

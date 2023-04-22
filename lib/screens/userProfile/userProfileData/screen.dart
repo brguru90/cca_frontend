@@ -1,7 +1,8 @@
 import 'dart:convert';
+
+import 'package:cca_vijayapura/services/http_request.dart';
+import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_crud_auth/services/http_request.dart';
-import 'package:flutter_crud_auth/sharedComponents/toastMessages/toastMessage.dart';
 
 class UserProfileData extends StatefulWidget {
   Future Function() getUserData;
@@ -45,7 +46,7 @@ class _UserProfileDataState extends State<UserProfileData> {
           "name": nameController.text,
           "description": descriptionController.text,
         }),
-        navigateToIfNotAllowed: () =>
+        navigateToIfNotAllowed: (statusCode) =>
             Navigator.pushReplacementNamed(context, "/")).then((data) {
       ToastMessage.success(jsonDecode(data["body"])["msg"] ?? data.toString());
       getProfileData();

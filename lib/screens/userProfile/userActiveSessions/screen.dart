@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_crud_auth/services/http_request.dart';
+
 import './activeSessionCard.dart';
 
 class UserActiveSessions extends StatefulWidget {
@@ -17,7 +18,7 @@ class _UserActiveSessionsState extends State<UserActiveSessions> {
   void getActiveSessions() async {
     exeFetch(
         uri: "/api/user/active_sessions/",
-        navigateToIfNotAllowed: () =>
+        navigateToIfNotAllowed: (statusCode) =>
             Navigator.pushReplacementNamed(context, "/")).then((data) {
       setState(() {
         activeSessions = [...jsonDecode(data["body"])["data"]];

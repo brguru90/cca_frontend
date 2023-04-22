@@ -1,5 +1,5 @@
 {
-  "name": "flutter_frontend",
+  "name": "cca_vijayapura",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -7,8 +7,18 @@
     "clean": "flutter clean ",
     "get": "flutter packages get",
     "upgrade": "flutter packages upgrade",
-    "install":"npm-run-all --serial --continue-on-error clean get",
-    "start": "flutter run"
+    "install": "npm-run-all --serial --continue-on-error clean get",
+    "unsafeStart": "flutter run --no-sound-null-safety",
+    "start": "flutter run",
+    "build": "flutter build apk --profile --dart-define=RELEASE_MODE=true",
+    "build_release": "flutter build apk --release --dart-define=RELEASE_MODE=true --target-platform android-arm,android-arm64",
+    "install_release": "flutter run --release --dart-define=RELEASE_MODE=true",
+    "build_release_bundle": "flutter build appbundle --release --dart-define=RELEASE_MODE=true",
+    "check_build_size": "flutter build apk --release --dart-define=RELEASE_MODE=true --target-platform android-arm64 --analyze-size",
+    "check_asset_size": "du -sh assets/ && echo '' && du -sh assets/* && echo '' && du -sh assets/images/*",
+    "adb_kill": "adb kill-server",
+    "connect": "adb reverse tcp:8000 tcp:8000",
+    "connect_to_mobile": "adb forward tcp:8000 tcp:8000"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5"

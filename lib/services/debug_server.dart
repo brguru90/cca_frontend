@@ -15,7 +15,7 @@ Map fixData(Map obj) {
     });
   temp.forEach((key, value) {
     try {
-      temp[key] = "\n" + getPrettyJSONString(value?.toMap() ?? {}) + "\n";
+      temp[key] = "\n${getPrettyJSONString(value?.toMap() ?? {})}\n";
     } catch (e) {}
   });
   return temp;
@@ -23,10 +23,7 @@ Map fixData(Map obj) {
 
 startServer() async {
   var server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8898);
-  print("Server running on IP : " +
-      server.address.toString() +
-      " On Port : " +
-      server.port.toString());
+  print("Server running on IP : ${server.address} On Port : ${server.port}");
   await for (var request in server) {
     try {
       request.response

@@ -84,7 +84,7 @@ class _LandingBodyState extends State<LandingBody> {
       setState(() {
         loading = false;
       });
-      Navigator.pushNamed(context, "/socialSignUp");
+      Navigator.pushNamed(context, "/home");
     }).catchError((e) {
       setState(() {
         loading = false;
@@ -104,7 +104,8 @@ class _LandingBodyState extends State<LandingBody> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () =>
+                      Navigator.pushNamed(context, "/signUpMobile"),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
                       const EdgeInsets.symmetric(

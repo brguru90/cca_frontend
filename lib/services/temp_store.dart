@@ -77,13 +77,12 @@ class SharedState<T> {
         }
       } catch (e) {
         shared_logger.e(
-            "error while calling parseToType:\n" + jsonEncode(temp_store[key]));
+            "error while calling parseToType:\n${jsonEncode(temp_store[key])}");
         rethrow;
       }
     } else {
       shared_logger.wtf(
-          "Only work if specified type is user defined class type or Map:\n" +
-              T.toString());
+          "Only work if specified type is user defined class type or Map:\n$T");
     }
   }
 
@@ -100,7 +99,7 @@ class SharedState<T> {
         }
       } catch (e) {
         shared_logger
-            .e("error while calling parseToType:\n" + jsonEncode(newState));
+            .e("error while calling parseToType:\n${jsonEncode(newState)}");
         rethrow;
       }
     } else if (newState is Map) {
@@ -171,8 +170,8 @@ class SharedState<T> {
   /// where Map is the value to the state
   ///
   /// Function is the callback after all onStateUpdateCallback finishes, probably not needed in most of case
-  set state(_value) {
-    dynamic value = _onAfterUpdate(_value);
+  set state(origValue) {
+    dynamic value = _onAfterUpdate(origValue);
     _updateStoreData(value, _key, _persist);
     _customEvent!.sendEvent("");
   }
@@ -194,8 +193,8 @@ class SharedState<T> {
   ///
   /// !!! if you trying to update class or map on `large shared state`,
   /// use updateState instead of patchState, to directly update specific member of state
-  set patchState(_value) {
-    dynamic value = _onAfterUpdate(_value);
+  set patchState(origValue) {
+    dynamic value = _onAfterUpdate(origValue);
     if (value is! Map) {
       throw Exception(
           "patchState only accept Map type, but got type ${value.runtimeType}");

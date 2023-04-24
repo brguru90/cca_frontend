@@ -1,6 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:cca_vijayapura/services/auth.dart';
+import 'package:cca_vijayapura/services/http_request.dart';
+import 'package:cca_vijayapura/services/social_authentication.dart';
+import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:cca_vijayapura/sharedComponents/orgBanner/widget.dart';
 import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
+import 'package:cca_vijayapura/sharedState/state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,35 +19,104 @@ class SignUpMobile extends StatefulWidget {
   State<SignUpMobile> createState() => _SignUpMobileState();
 }
 
-enum OtpStatus { none, sent, invalidOTP, invalidMobileNumber, timeout }
+enum OtpStatus {
+  none,
+  sent,
+  invalidOTP,
+  invalidMobileNumber,
+  timeout,
+  verified
+}
 
 class _SignUpMobileState extends State<SignUpMobile> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController mobileNumberController =
-      TextEditingController(text: "");
-  final TextEditingController otpController = TextEditingController(text: "");
+          TextEditingController(text: "+91"),
+      otpController = TextEditingController(text: ""),
+      nameController = TextEditingController(text: ""),
+      passwordController = TextEditingController(text: ""),
+      confirmPasswordController = TextEditingController(text: "");
 
   User? userDetail;
-  bool validMobileNumber = false;
+  bool validMobileNumber = false, signUp = false;
   OtpStatus otpStatus = OtpStatus.invalidOTP;
   String verificationId = "";
+  String finalVerifiedMobileNumber = "";
+  bool loading = false;
+
+  void onLogin() => Navigator.pushNamed(context, "/home");
+
+  void signUpOrLoginWithCredential() async {
+    setState(() {
+      loading = true;
+    });
+    if (signUp) {
+      if (passwordController.text != confirmPasswordController.text) {
+        ToastMessage.error("Password mismatch");
+        return;
+      }
+      try {
+        await getTokenVerified(
+          mobile: finalVerifiedMobileNumber,
+          name: nameController.text,
+          password: passwordController.text,
+        );
+        onLogin();
+      } catch (e) {
+        shared_logger.e(e);
+        ToastMessage.error("Error in sign up");
+      } finally {
+        setState(() {
+          loading = false;
+        });
+      }
+    } else {
+      await exeFetch(
+        uri: "/api/login_mobile/",
+        method: "post",
+        body: jsonEncode({
+          "mobile": mobileNumberController.text,
+          "password": otpController.text,
+        }),
+      ).then((value) {
+        setState(() {
+          loading = false;
+        });
+        final respBody = jsonDecode(value["body"]);
+        userData.state = respBody?["data"];
+        ToastMessage.success("Signed in");
+        onLogin();
+      }).catchError((e) {
+        setState(() {
+          loading = false;
+        });
+        final respBody = jsonDecode(e?["body"]);
+        if (respBody?["data"]?["errors"] != null) {
+          shared_logger.e(respBody?["data"]?["errors"]);
+        }
+        ToastMessage.show(respBody?["msg"], respBody?["status"]);
+      });
+    }
+  }
 
   Future signWithMobile(credential) async {
     try {
       var ft = await auth.signInWithCredential(credential);
-      verificationId = "";
       setState(() {
-        otpStatus = OtpStatus.none;
+        verificationId = "";
+        otpStatus = OtpStatus.verified;
       });
       _formKey.currentState!.validate();
       otpController.text = "";
       ToastMessage.error("Mobile number verified successfully");
+      signUpOrLoginWithCredential();
       return ft;
     } catch (e) {
       print(e);
       setState(() {
         otpStatus = OtpStatus.invalidOTP;
+        finalVerifiedMobileNumber = "";
       });
       _formKey.currentState!.validate();
       ToastMessage.error("Please enter correct OTP");
@@ -74,10 +150,11 @@ class _SignUpMobileState extends State<SignUpMobile> {
           _formKey.currentState!.validate();
           ToastMessage.error("Time out for auto retrieval of OTP");
         },
-        codeSent: (String verificationId, int? resendToken) {
-          verificationId = verificationId;
+        codeSent: (String sentVerificationId, int? resendToken) {
           setState(() {
             otpStatus = OtpStatus.sent;
+            verificationId = sentVerificationId;
+            finalVerifiedMobileNumber = mobileNumberController.text;
           });
           _formKey.currentState!.validate();
           print("code sent");
@@ -141,7 +218,7 @@ class _SignUpMobileState extends State<SignUpMobile> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
-            Text("Signup"),
+            Text("Login / Signup"),
           ],
         ),
         foregroundColor: const Color(0xFF6750A3),
@@ -174,6 +251,7 @@ class _SignUpMobileState extends State<SignUpMobile> {
                       : null,
                   onChanged: (value) {
                     setState(() {
+                      otpStatus = OtpStatus.none;
                       validMobileNumber = mobileNumberRegex.hasMatch(value);
                     });
                   },
@@ -196,14 +274,13 @@ class _SignUpMobileState extends State<SignUpMobile> {
                     labelStyle: const TextStyle(
                       color: Color(0xFF6750A4),
                     ),
-                    helperText:
-                        'Note: In future this number will be used to authorize account related operation',
+                    helperText: 'Example: +919482399078',
                     suffixIcon: mobileNumberController.text != ""
                         ? validMobileNumber
                             ? const Icon(
                                 Icons.check_circle,
                                 color: Color(0xFF6750A4),
-                                size: 25,
+                                size: 28,
                               )
                             : Container(
                                 width: 16,
@@ -235,75 +312,268 @@ class _SignUpMobileState extends State<SignUpMobile> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, "/signUpMobile"),
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 15,
+                ...(() {
+                  if (validMobileNumber) {
+                    return [
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 40,
+                        child: (() {
+                          if (signUp) {
+                            return ElevatedButton(
+                              onPressed: () {
+                                otpStatus = OtpStatus.none;
+                                finalVerifiedMobileNumber = "";
+                                verifyMobileNumber();
+                              },
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all<EdgeInsets>(
+                                  const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
+                                ),
+                                overlayColor: MaterialStateProperty.all(
+                                    const Color.fromARGB(27, 104, 80, 163)),
+                                backgroundColor:
+                                    const MaterialStatePropertyAll<Color>(
+                                  Color.fromARGB(255, 255, 255, 255),
+                                ),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    side: const BorderSide(
+                                      color: Color(0xFF6750A3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    "Send OTP",
+                                    style: TextStyle(
+                                      color: Color(0xFF6750A3),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  SvgPicture.asset(
+                                    "assets/icons/send.svg",
+                                    colorFilter: const ColorFilter.mode(
+                                      Color(0xFF6750A3),
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  signUp = true;
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    "Don't have account yet?",
+                                    style: TextStyle(
+                                      color: Color(0xFFFF0099),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "Sign Up",
+                                    style: TextStyle(
+                                      color: Color(0xFF6750A3),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        })(),
                       ),
-                    ),
-                    backgroundColor: const MaterialStatePropertyAll<Color>(
-                        Color(0xFF6750A3)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        side: const BorderSide(
-                            color: Color.fromARGB(0, 255, 255, 255)),
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        "Send OTP",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: otpController,
+                        cursorColor:
+                            Theme.of(context).textSelectionTheme.cursorColor,
+                        maxLength: 15,
+                        decoration: InputDecoration(
+                          labelText: signUp ? 'OTP' : "PASSWORD",
+                          labelStyle: const TextStyle(
+                            color: Color(0xFF6750A4),
+                          ),
+                          helperText:
+                              'Warning: Entering more than 3 wrong otp will block sign in for next 5 minutes',
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(149, 102, 80, 164)),
+                          ),
+                          focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFF6750A4)),
+                          ),
+                          errorBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                      const SizedBox(width: 10),
-                      SvgPicture.asset(
-                        "assets/icons/send.svg",
-                        colorFilter: const ColorFilter.mode(
-                          Color.fromARGB(255, 255, 255, 255),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: otpController,
-                  cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
-                  maxLength: 15,
-                  decoration: const InputDecoration(
-                    labelText: 'OTP',
-                    labelStyle: TextStyle(
-                      color: Color(0xFF6750A4),
-                    ),
-                    helperText:
-                        'Warning: Entering more than 3 wrong otp will block sign in for next 5 minutes',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color.fromARGB(149, 102, 80, 164)),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFF6750A4)),
-                    ),
-                    errorBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                  ),
-                ),
+                      const SizedBox(height: 20),
+                      ...(() {
+                        if (otpStatus == OtpStatus.sent ||
+                            otpStatus == OtpStatus.verified) {
+                          return [
+                            TextFormField(
+                              controller: nameController,
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .cursorColor,
+                              maxLength: 15,
+                              decoration: const InputDecoration(
+                                labelText: "Name",
+                                labelStyle: TextStyle(
+                                  color: Color(0xFF6750A4),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromARGB(149, 102, 80, 164)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFF6750A4)),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            TextFormField(
+                              controller: passwordController,
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .cursorColor,
+                              maxLength: 15,
+                              decoration: const InputDecoration(
+                                labelText: "Password",
+                                labelStyle: TextStyle(
+                                  color: Color(0xFF6750A4),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromARGB(149, 102, 80, 164)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFF6750A4)),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                              ),
+                            ),
+                            TextFormField(
+                              controller: confirmPasswordController,
+                              cursorColor: Theme.of(context)
+                                  .textSelectionTheme
+                                  .cursorColor,
+                              maxLength: 15,
+                              validator: (value) => (value != "" &&
+                                      value != null &&
+                                      value != passwordController.text)
+                                  ? "Password didn't matched"
+                                  : null,
+                              decoration: const InputDecoration(
+                                labelText: "Confirm Password",
+                                labelStyle: TextStyle(
+                                  color: Color(0xFF6750A4),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromARGB(149, 102, 80, 164)),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xFF6750A4)),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red),
+                                ),
+                              ),
+                            ),
+                          ];
+                        }
+                        return [];
+                      })(),
+                      (() {
+                        if (!signUp || otpStatus != OtpStatus.none) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (!signUp || otpStatus == OtpStatus.verified) {
+                                signUpOrLoginWithCredential();
+                                return;
+                              }
+                              if (otpStatus != OtpStatus.none) {
+                                verifyOTP();
+                              }
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 15,
+                                ),
+                              ),
+                              backgroundColor:
+                                  const MaterialStatePropertyAll<Color>(
+                                      Color(0xFF6750A3)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  side: const BorderSide(
+                                      color: Color.fromARGB(0, 255, 255, 255)),
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  signUp ? "Sign Up" : "Login",
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        return const SizedBox();
+                      })(),
+                    ];
+                  }
+                  return [];
+                })(),
               ],
             ),
           ),

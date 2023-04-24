@@ -150,30 +150,6 @@ class _LandingBodyState extends State<LandingBody> {
                   padding: const EdgeInsets.symmetric(vertical: 30),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Already have an Account?",
-                            style: TextStyle(
-                              color: Color(0xFFFF0099),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "Login",
-                            style: TextStyle(
-                              color: Color(0xFF6750A3),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 6),
                       FractionallySizedBox(
                         widthFactor: 0.4,

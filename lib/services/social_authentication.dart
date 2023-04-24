@@ -29,7 +29,7 @@ Future socialAuth({String provider = "google"}) {
   return c.future;
 }
 
-Future getTokenVerified() {
+Future getTokenVerified({String? name, String? mobile, String? password}) {
   Completer c = Completer();
   auth.currentUser!.getIdToken(true).then((idToken) {
     exeFetch(
@@ -37,6 +37,9 @@ Future getTokenVerified() {
       method: "post",
       body: jsonEncode({
         "idToken": idToken,
+        "mobile": mobile,
+        "name": name,
+        "password": password,
       }),
     ).then((value) {
       final respBody = jsonDecode(value["body"]);

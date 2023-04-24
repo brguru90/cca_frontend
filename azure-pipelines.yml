@@ -13,13 +13,6 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-  - task: DownloadSecureFile@1
-    displayName: Get google-services.json
-    name: googleServicesJson
-    inputs:
-      secureFile: 'google-services.json'
-  - pwsh: Move-Item $(googleServicesJson.secureFilePath) android/app/ -Force
-    displayName: Override google-services.json
   - task: FlutterInstall@0
     displayName: Install Flutter
     inputs:

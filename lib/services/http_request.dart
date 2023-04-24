@@ -95,7 +95,7 @@ Future<Map<dynamic, dynamic>> exeFetch({
     });
 
     String ua = request.headers.value("user-agent") ?? "";
-    ua = ua + "," + jsonEncode(temp_store["deviceInfo"]);
+    ua = "$ua,${jsonEncode(temp_store["deviceInfo"])}";
     request.headers.set("user-agent", ua);
 
     String cookies =
@@ -132,16 +132,16 @@ Future<Map<dynamic, dynamic>> exeFetch({
     }
 
     if (response.cookies.isNotEmpty) {
-      String _cookies = jsonEncode(
+      String cookies0 = jsonEncode(
           response.cookies.map((cookie) => cookie.toString()).toList());
-      await storage.write(key: "cookies", value: _cookies);
-      temp_store["cookies"] = _cookies;
+      await storage.write(key: "cookies", value: cookies0);
+      temp_store["cookies"] = cookies0;
     }
 
     final stringData = await response.transform(utf8.decoder).join();
     // print('uri=$uri => Response status: ${response.statusCode}\nResponse body2: $stringData');
 
-    if (response.statusCode >= 200 && response.statusCode < 300) {
+    if (response.statusCode >= 200 && response.statusCode <= 300) {
       future = Future<Map>.value({"body": stringData});
     } else if (response.statusCode == 401) {
       // // this also works

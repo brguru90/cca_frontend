@@ -1,6 +1,7 @@
+import 'package:cca_vijayapura/screens/home/widget.dart';
 import 'package:cca_vijayapura/screens/landing/widget.dart';
 import 'package:cca_vijayapura/screens/login/screen.dart';
-import 'package:cca_vijayapura/screens/signUp/socialAccountSigup.dart';
+import 'package:cca_vijayapura/screens/signUp/signUpMobile.dart';
 import 'package:cca_vijayapura/screens/signUpOld/screen.dart';
 import 'package:cca_vijayapura/screens/userProfile/screen.dart';
 import 'package:cca_vijayapura/services/auth.dart';
@@ -67,8 +68,9 @@ void main() async {
     initialRoute: "/",
     routes: {
       "/": (context) => const LandingScreen(),
-      "/socialSignUp": (context) => const SocialAccountSignup(),
+      "/signUpMobile": (context) => const SignUpMobile(),
       "/login": (context) => LoginScreen(env_values: envValues),
+      "/home": (context) => const HomeScreen(),
       "/old_sign_up": (context) => SignUP(env_values: envValues),
       "/user_profile": (context) => UserProfile(env_values: envValues),
     },

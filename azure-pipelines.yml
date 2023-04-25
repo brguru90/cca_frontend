@@ -14,6 +14,11 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
+  - task: CmdLine@2
+    inputs:
+      script: |
+        sudo apt-get -y install zip
+        echo Hello world
   - task: FlutterBuild@0
     inputs:
       target: 'apk'

@@ -19,10 +19,9 @@ jobs:
       target: 'apk'
       projectDirectory: '(Agent.BuildDirectory)'
       flutterDirectory: '(Agent.BuildDirectory)'
-      verboseMode: true
       debugMode: true
       buildFlavour: 'dev'
-      buildNumber: '$(Build.BuildNumber)'
+      buildName: '$(Build.BuildNumber)'
   - task: PublishBuildArtifacts@1
     displayName: Publish artifact
     inputs:

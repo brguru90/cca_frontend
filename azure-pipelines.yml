@@ -17,7 +17,7 @@ jobs:
   - task: FlutterBuild@0
     inputs:
       target: 'apk'
-      projectDirectory: '$(Build.SourcesDirectory)'
+      projectDirectory: '$(System.DefaultWorkingDirectory)/'
       flutterDirectory: '$(Build.SourcesDirectory)'
       debugMode: true
       buildFlavour: 'dev'

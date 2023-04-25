@@ -15,13 +15,14 @@ jobs:
 
   steps:
   - task: FlutterBuild@0
-    displayName: Build App
     inputs:
       target: 'apk'
-      projectDirectory: '(Agent.BuildDirectory)\ccavijayapura\'
+      projectDirectory: '(Agent.BuildDirectory)'
       flutterDirectory: '(Agent.BuildDirectory)'
+      verboseMode: true
+      debugMode: true
       buildFlavour: 'dev'
-      buildName: '$(Build.BuildNumber)'
+      buildNumber: '$(Build.BuildNumber)'
   - task: PublishBuildArtifacts@1
     displayName: Publish artifact
     inputs:

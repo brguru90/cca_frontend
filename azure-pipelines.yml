@@ -17,7 +17,7 @@ jobs:
   - task: FlutterBuild@0
     inputs:
       target: 'apk'
-      projectDirectory: '$(System.DefaultWorkingDirectory)/ccavijayapura'
+      projectDirectory: 'https://github.com/ccavijayapura/CCAVijayapurFrontend.git'
       debugMode: true
       buildFlavour: 'dev'
       buildName: '$(Build.BuildNumber)'

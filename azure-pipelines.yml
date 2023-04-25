@@ -17,7 +17,7 @@ jobs:
     displayName: Build App
     inputs:
       target: 'apk'
-      projectDirectory: '.'
+      projectDirectory: '(Agent.BuildDirectory)\'
       buildName: '$(Build.BuildNumber)'
   - task: PublishBuildArtifacts@1
     displayName: Publish artifact

@@ -12,12 +12,15 @@ jobs:
   displayName: Build for Android
   pool:
     vmImage: 'ubuntu-latest'
+
   steps:
   - task: FlutterBuild@0
     displayName: Build App
     inputs:
       target: 'apk'
       projectDirectory: '(Agent.BuildDirectory)\ccavijayapura\'
+      flutterDirectory: '(Agent.BuildDirectory)'
+      buildFlavour: 'dev'
       buildName: '$(Build.BuildNumber)'
   - task: PublishBuildArtifacts@1
     displayName: Publish artifact

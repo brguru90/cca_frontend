@@ -16,7 +16,7 @@ jobs:
   - task: FlutterInstall@0
     displayName: Install Flutter
     inputs:
-      channel: 'stable'
+      channel: 'beta'
       version: 'latest'
   - task: FlutterBuild@0
     displayName: Build App

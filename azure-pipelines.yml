@@ -17,9 +17,10 @@ jobs:
   - task: CmdLine@2
     inputs:
       script: |
-        ls -la $(Build.SourcesDirectory)
+       
         pwd
         chmod +x $(Build.SourcesDirectory)/*
+         ls -la $(Build.SourcesDirectory)
   - task: FlutterBuild@0
     inputs:
       target: 'apk'

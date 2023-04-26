@@ -14,6 +14,12 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
+  - task: CmdLine@2
+    inputs:
+     script: |
+      ls -l /home/vsts/work/1/s/flutter
+      
+      echo $PATH
   - task: FlutterBuild@0
     inputs:
       target: 'apk'

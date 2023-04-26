@@ -16,7 +16,9 @@ jobs:
   steps:
   - task: CmdLine@2
     inputs:
-      script: 'ls'
+      script: |
+        ls
+        pwd
   - task: FlutterBuild@0
     inputs:
       target: 'apk'

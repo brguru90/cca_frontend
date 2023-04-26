@@ -14,16 +14,10 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
-  - task: CmdLine@2
-    inputs:
-     script: |
-      ls -l /home/vsts/work/1/s/flutter
-      
-      echo $PATH
   - task: FlutterBuild@0
     inputs:
       target: 'apk'
-      projectDirectory: '${System.SystemDefualtWorkingDirectory}/home/vsts/work/1/s/'
+      projectDirectory: '${System.SystemDefualtWorkingDirectory}'
       debugMode: true
       buildFlavour: 'dev'
       buildName: '$(Build.BuildNumber)'

@@ -17,7 +17,7 @@ jobs:
   - task: FlutterBuild@0
     inputs:
       target: 'apk'
-      projectDirectory: '${System.SystemDefualtWorkingDirectory}'
+      projectDirectory: '$(Build.SourcesDirectory)\ccavijayapura\'
       debugMode: true
       buildFlavour: 'dev'
       buildName: '$(Build.BuildNumber)'

@@ -20,7 +20,7 @@ jobs:
   - task: FlutterBuild@0
     inputs:
       target: 'apk'
-      projectDirectory: '$(Build.SourcesDirectory)\package.json'
+      projectDirectory: '\home\vsts\work\_temp\'
       debugMode: true
       buildFlavour: 'dev'
       buildName: '$(Build.BuildNumber)'

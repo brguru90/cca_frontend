@@ -17,12 +17,12 @@ jobs:
   - task: CmdLine@2
     inputs:
       script: |
-        ls -la
+        ls -la $(Build.SourcesDirectory)
         pwd
   - task: FlutterBuild@0
     inputs:
       target: 'apk'
-      projectDirectory: '$(Build.SourcesDirectory)\package.json'
+      projectDirectory: '$(Build.SourcesDirectory)/package.json'
       debugMode: true
       buildFlavour: 'dev'
       buildName: '$(Build.BuildNumber)'

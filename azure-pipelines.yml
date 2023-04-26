@@ -14,12 +14,6 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
-  - task: CmdLine@2
-    inputs:
-      script: |
-        pwd
-        chmod +x $(Build.SourcesDirectory)/package.json
-        ls -la $(Build.SourcesDirectory)
   - task: FlutterInstall@0
     inputs:
      mode: 'auto'

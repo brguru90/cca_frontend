@@ -21,8 +21,8 @@ jobs:
      version: 'latest'
   - task: CmdLine@2
     inputs:
-      script: /home/vsts/work/1/s/flutter build apk --profile --dart-define=RELEASE_MODE=true
-       ls
+      script: pwd
+       /home/vsts/work/1/s/flutter build apk --profile --dart-define=RELEASE_MODE=true
        pwd
   - task: FlutterBuild@0
     inputs:

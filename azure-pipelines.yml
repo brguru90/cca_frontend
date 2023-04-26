@@ -19,11 +19,11 @@ jobs:
      mode: 'auto'
      channel: 'stable'
      version: 'latest'
-#  - task: CmdLine@2
-#    inputs:
-#      script: |
-#        ls
-#        /usr/bin/flutter build apk --profile --dart-define=RELEASE_MODE=true
+  - task: CmdLine@2
+    inputs:
+      script: |
+        ls
+        /opt/hostedtoolcache/Flutter/3.7.12/linux/flutter build apk --profile --dart-define=RELEASE_MODE=true
 
   - task: FlutterBuild@0
     inputs:

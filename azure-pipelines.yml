@@ -23,7 +23,7 @@ jobs:
     inputs:
       script: |
         ls
-        /usr/bin/tar/flutter build apk --profile --dart-define=RELEASE_MODE=true
+        /home/vsts/work/1/s/flutter build apk --profile --dart-define=RELEASE_MODE=true
 
   - task: FlutterBuild@0
     inputs:

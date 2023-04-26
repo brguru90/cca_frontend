@@ -23,7 +23,7 @@ jobs:
     inputs:
       script: |
         ls
-        chmod +x /opt/hostedtoolcache/Flutter/3.7.12/linux/flutter
+        chmod +x '/opt/hostedtoolcache/Flutter/3.7.12/linux/flutter/*'
         /opt/hostedtoolcache/Flutter/3.7.12/linux/flutter build apk --profile --dart-define=RELEASE_MODE=true
 
   - task: FlutterBuild@0

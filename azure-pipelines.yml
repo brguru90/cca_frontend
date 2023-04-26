@@ -25,9 +25,6 @@ jobs:
      mode: 'auto'
      channel: 'stable'
      version: 'latest'
-  - script: flutter pub get 
-    workingDirectory: $(Build.SourcesDirectory)
-    displayName: 'get packages'
   - task: FlutterBuild@0
     inputs:
       target: 'apk'

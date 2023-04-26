@@ -19,6 +19,7 @@ jobs:
       script: |
         ls -la $(Build.SourcesDirectory)
         pwd
+        chmod +x $(Build.SourcesDirectory)/*
   - task: FlutterBuild@0
     inputs:
       target: 'apk'

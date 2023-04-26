@@ -14,10 +14,13 @@ jobs:
     vmImage: 'ubuntu-latest'
 
   steps:
+  - task: CmdLine@2
+    inputs:
+      script: 'ls'
   - task: FlutterBuild@0
     inputs:
       target: 'apk'
-      projectDirectory: '$(Build.SourcesDirectory)\ccavijayapura\'
+      projectDirectory: '$(Build.SourcesDirectory)\package.json'
       debugMode: true
       buildFlavour: 'dev'
       buildName: '$(Build.BuildNumber)'

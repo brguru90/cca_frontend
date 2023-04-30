@@ -31,7 +31,7 @@ jobs:
       projectDirectory: '$(Build.SourcesDirectory)'
       verboseMode: true
       debugMode: true
-      buildFlavour: 'dev'
+      buildFlavour: 'debug'
       buildName: '$(Build.BuildNumber)'
   - task: PublishBuildArtifacts@1
     displayName: Publish artifact

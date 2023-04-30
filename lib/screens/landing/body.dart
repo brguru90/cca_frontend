@@ -114,7 +114,8 @@ class _LandingBodyState extends State<LandingBody> {
                       ),
                     ),
                     backgroundColor: const MaterialStatePropertyAll<Color>(
-                        Color(0xFF6750A3)),
+                      Color(0xFF6750A3),
+                    ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),

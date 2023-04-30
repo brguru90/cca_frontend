@@ -35,7 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   material_design_icons_flutter: ^6.0.7096
 
-  http: ^0.13.4
+  http: ^0.13.5
   flutter_dotenv: ^5.0.2
   flutter_secure_storage: ^8.0.0
   fluttertoast: ^8.0.9
@@ -52,6 +52,8 @@ dependencies:
   flutter_facebook_auth: ^5.0.8
   google_sign_in: ^5.3.0
   google_api_availability: ^5.0.0
+  carousel_slider: ^4.2.1
+  bottom_bar_page_transition: ^2.0.0
 
 dev_dependencies:
   flutter_test:

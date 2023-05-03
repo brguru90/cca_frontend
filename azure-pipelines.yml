@@ -35,6 +35,6 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: Publish artifact
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/build/app/outputs/flutter-apk/'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'apk'
       publishLocation: 'Container'

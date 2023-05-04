@@ -36,6 +36,6 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: Publish artifact
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/'
       ArtifactName: 'apk'
       publishLocation: 'Container'

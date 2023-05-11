@@ -1,3 +1,9 @@
+import 'package:cca_vijayapura/screens/home/widget.dart';
+import 'package:cca_vijayapura/screens/landing/widget.dart';
+import 'package:cca_vijayapura/screens/login/screen.dart';
+import 'package:cca_vijayapura/screens/signUp/signUpMobile.dart';
+import 'package:cca_vijayapura/screens/signUpOld/screen.dart';
+import 'package:cca_vijayapura/screens/userProfile/screen.dart';
 import 'package:cca_vijayapura/screens/watchVideo/widget.dart';
 import 'package:cca_vijayapura/services/auth.dart';
 import 'package:cca_vijayapura/services/debug_server.dart';
@@ -62,14 +68,14 @@ void mapRoutes() {
   return runApp(WrapApp(MaterialApp(
     initialRoute: "/",
     routes: {
-      // "/": (context) => const LandingScreen(),
-      // "/signUpMobile": (context) => const SignUpMobile(),
-      // "/watch_video": (context) => const WatchVideo(),
-      // "/login": (context) => LoginScreen(env_values: envValues),
-      // "/home": (context) => const HomeScreen(),
-      // "/old_sign_up": (context) => SignUP(env_values: envValues),
-      // "/user_profile": (context) => UserProfile(env_values: envValues),
-      "/": (context) => const WatchVideo(),
+      "/": (context) => const LandingScreen(),
+      "/signUpMobile": (context) => const SignUpMobile(),
+      "/watch_video": (context) => const WatchVideo(),
+      "/login": (context) => LoginScreen(env_values: envValues),
+      "/home": (context) => const HomeScreen(),
+      "/old_sign_up": (context) => SignUP(env_values: envValues),
+      "/user_profile": (context) => UserProfile(env_values: envValues),
+      // "/": (context) => const WatchVideo(),
     },
   )));
 }

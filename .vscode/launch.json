@@ -27,6 +27,7 @@
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile",
+      "preLaunchTask": "connect_mobile",
       "args": ["--no-sound-null-safety", "--dart-define", "RELEASE_MODE=true"]
     },
     {
@@ -35,6 +36,7 @@
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",
+      "preLaunchTask": "connect_mobile",
       "args": ["--dart-define", "RELEASE_MODE=true"]
     },
   ]

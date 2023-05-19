@@ -6,19 +6,12 @@
   "configurations": [
     {
       "name": "cca (debug)",
-      "cwd": "",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
       "preLaunchTask": "connect_mobile",
-      "env": {
-        "APP_ENV": "development",
-        "SERVER_HOST": "localhost",
-        "SERVER_PROTOCOL": "development",
-        "SERVER_PORT": "http",
-        "APP_ID":"development",
-        "APP_SECRET":"1234"
-      }
+      "cwd": "${workspaceFolder}/",
+      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env.json"],
     },
     {
       "name": "cca (debug using remote server)",
@@ -27,13 +20,7 @@
       "type": "dart",
       "flutterMode": "debug",
       "preLaunchTask": "connect_mobile",
-      "args": ["--dart-define", "RELEASE_MODE=true"],
-      "env": {
-        "APP_ENV": "development",
-        "SERVER_HOST": "localhost",
-        "SERVER_PROTOCOL": "development",
-        "SERVER_PORT": "http"
-      }
+      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env-prod.json"],
     },
   ]
 }

@@ -1,16 +1,16 @@
-import 'package:cca_vijayapura/screens/coursePlaylist/playlistSlider/widget.dart';
 import 'package:cca_vijayapura/screens/home/bottomNavBar.dart';
 import 'package:cca_vijayapura/screens/home/header.dart';
+import 'package:cca_vijayapura/screens/playlistVideos/videosSlider/widget.dart';
 import 'package:flutter/material.dart';
 
-class CoursePlaylist extends StatefulWidget {
-  const CoursePlaylist({Key? key}) : super(key: key);
+class PlaylistVideos extends StatefulWidget {
+  const PlaylistVideos({Key? key}) : super(key: key);
 
   @override
-  State<CoursePlaylist> createState() => _CoursePlaylistState();
+  State<PlaylistVideos> createState() => _PlaylistVideosState();
 }
 
-class _CoursePlaylistState extends State<CoursePlaylist> {
+class _PlaylistVideosState extends State<PlaylistVideos> {
   ScrollController scrollController = ScrollController();
   double scrollCount = 0;
 
@@ -24,6 +24,7 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
       // ),
       body: SafeArea(
         child: Container(
+          // padding: const EdgeInsets.symmetric(horizontal: 20),
           color: Colors.white,
           child: Column(
             children: [
@@ -39,11 +40,11 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                   Image.asset(
                     "assets/icons/training.png",
                     fit: BoxFit.cover,
-                    height: 100,
-                    width: 100,
+                    height: 80,
+                    width: 80,
                   ),
                   const Text(
-                    "Courses",
+                    "PC/PCI",
                     style: TextStyle(
                       fontSize: 40.0,
                       color: Color(0xFF6750A3),
@@ -61,6 +62,7 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                   )
                 ],
               ),
+              const SizedBox(height: 10),
               Expanded(
                 child: Stack(
                   children: [
@@ -70,27 +72,17 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                           if (scrollNotification is ScrollUpdateNotification &&
                               scrollNotification.metrics.axis ==
                                   Axis.vertical) {
-                            // print(scrollNotification.metrics.pixels);
                             setState(() {
                               scrollCount = scrollNotification.metrics.pixels;
                             });
-                            // print(scrollNotification.metrics.axis);
                           }
                           return true;
                         },
                         child: SingleChildScrollView(
                           controller: scrollController,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              children: const [
-                                PlaylistSlider(),
-                                PlaylistSlider(),
-                                PlaylistSlider(),
-                                PlaylistSlider(),
-                                SizedBox(height: 10),
-                              ],
-                            ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: VideosSlider(),
                           ),
                         ),
                       ),

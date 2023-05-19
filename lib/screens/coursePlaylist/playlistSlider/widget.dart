@@ -32,26 +32,29 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                     color: Color(0xFF6750A3),
                     fontWeight: FontWeight.w800),
               ),
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/right_arrow.svg",
-                    colorFilter: const ColorFilter.mode(
-                      Color(0xFFFF0099),
-                      BlendMode.srcIn,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/playlist_videos'),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icons/right_arrow.svg",
+                      colorFilter: const ColorFilter.mode(
+                        Color(0xFFFF0099),
+                        BlendMode.srcIn,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  const Text(
-                    "full course",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Color(0xFFFF0099),
+                    const SizedBox(
+                      width: 5,
                     ),
-                  ),
-                ],
+                    const Text(
+                      "full course",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Color(0xFFFF0099),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -105,6 +108,7 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                           style: TextStyle(
                             fontSize: 16.0,
                             color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       )

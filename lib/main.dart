@@ -1,4 +1,12 @@
 import 'package:cca_vijayapura/screens/coursePlaylist/widget.dart';
+import 'package:cca_vijayapura/screens/home/widget.dart';
+import 'package:cca_vijayapura/screens/landing/widget.dart';
+import 'package:cca_vijayapura/screens/login/screen.dart';
+import 'package:cca_vijayapura/screens/playlistVideos/widget.dart';
+import 'package:cca_vijayapura/screens/signUp/signUpMobile.dart';
+import 'package:cca_vijayapura/screens/signUpOld/screen.dart';
+import 'package:cca_vijayapura/screens/userProfile/screen.dart';
+import 'package:cca_vijayapura/screens/watchVideo/widget.dart';
 import 'package:cca_vijayapura/services/auth.dart';
 import 'package:cca_vijayapura/services/debug_server.dart';
 import 'package:cca_vijayapura/services/secure_store.dart';
@@ -50,22 +58,20 @@ void mapRoutes() {
   return runApp(WrapApp(MaterialApp(
     initialRoute: "/",
     routes: {
-      // "/": (context) => const LandingScreen(),
-      // "/signUpMobile": (context) => const SignUpMobile(),
-      // "/watch_video": (context) => const WatchVideo(),
-      // "/login": (context) => const LoginScreen(),
-      // "/home": (context) => const HomeScreen(),
-      // "/old_sign_up": (context) => const SignUP(),
-      // "/user_profile": (context) => const UserProfile(),
-      // "/course_playlist": (context) => const CoursePlaylist(),
-      // "/": (context) => const WatchVideo(),
-      "/": (context) => const CoursePlaylist(),
+      "/": (context) => const LandingScreen(),
+      "/signUpMobile": (context) => const SignUpMobile(),
+      "/watch_video": (context) => const WatchVideo(),
+      "/login": (context) => const LoginScreen(),
+      "/home": (context) => const HomeScreen(),
+      "/old_sign_up": (context) => const SignUP(),
+      "/user_profile": (context) => const UserProfile(),
+      "/course_playlist": (context) => const CoursePlaylist(),
+      "/playlist_videos": (context) => const PlaylistVideos(),
     },
   )));
 }
 
 void main() async {
-  debugPrint(const String.fromEnvironment("SERVER_PORT"));
   await initialize();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

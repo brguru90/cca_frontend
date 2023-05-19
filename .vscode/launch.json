@@ -15,7 +15,9 @@
         "APP_ENV": "development",
         "SERVER_HOST": "localhost",
         "SERVER_PROTOCOL": "development",
-        "SERVER_PORT": "http"
+        "SERVER_PORT": "http",
+        "APP_ID":"development",
+        "APP_SECRET":"1234"
       }
     },
     {
@@ -33,35 +35,5 @@
         "SERVER_PORT": "http"
       }
     },
-    {
-      "name": "cca (profile mode)",
-      "cwd": "",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "profile",
-      "preLaunchTask": "connect_mobile",
-      "args": ["--no-sound-null-safety", "--dart-define", "RELEASE_MODE=true"],
-      "env": {
-        "APP_ENV": "development",
-        "SERVER_HOST": "localhost",
-        "SERVER_PROTOCOL": "development",
-        "SERVER_PORT": "http"
-      }
-    },
-    {
-      "name": "cca (release mode)",
-      "cwd": "",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "release",
-      "preLaunchTask": "connect_mobile",
-      "args": ["--dart-define", "RELEASE_MODE=true"],
-      "env":{
-        "APP_ENV":"development",
-        "SERVER_HOST":"localhost",
-        "SERVER_PROTOCOL":"development",
-        "SERVER_PORT":"http",
-      },
-    }
   ]
 }

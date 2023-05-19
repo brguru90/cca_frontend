@@ -13,25 +13,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'firebase_options.dart';
 
-Future<void> loadENV() {
-  const RELEASE_MODE = String.fromEnvironment("RELEASE_MODE");
-  if (RELEASE_MODE == "true" || RELEASE_MODE == true) {
-    return dotenv.load(fileName: "assets/env/.env_prod");
-  } else {
-    return dotenv.load(fileName: "assets/env/.env");
-  }
-}
-
 Future initialize() async {
-  await loadENV();
+  WidgetsFlutterBinding.ensureInitialized();
   initSecureStore();
   temp_store_reset();
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -64,23 +53,23 @@ Widget WrapApp(Widget child) {
 }
 
 void mapRoutes() {
-  Map<String, String> envValues = dotenv.env;
   return runApp(WrapApp(MaterialApp(
     initialRoute: "/",
     routes: {
       "/": (context) => const LandingScreen(),
       "/signUpMobile": (context) => const SignUpMobile(),
       "/watch_video": (context) => const WatchVideo(),
-      "/login": (context) => LoginScreen(env_values: envValues),
+      "/login": (context) => const LoginScreen(),
       "/home": (context) => const HomeScreen(),
-      "/old_sign_up": (context) => SignUP(env_values: envValues),
-      "/user_profile": (context) => UserProfile(env_values: envValues),
+      "/old_sign_up": (context) => const SignUP(),
+      "/user_profile": (context) => const UserProfile(),
       // "/": (context) => const WatchVideo(),
     },
   )));
 }
 
 void main() async {
+  debugPrint(const String.fromEnvironment("SERVER_PORT"));
   await initialize();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

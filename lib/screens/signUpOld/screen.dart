@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+
 import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
+import 'package:flutter/material.dart';
 
 class SignUP extends StatefulWidget {
-  final Map<String, String> env_values;
-
-  const SignUP({Key? key, Map<String, String> this.env_values = const {}})
-      : super(key: key);
+  const SignUP({Key? key}) : super(key: key);
 
   @override
   State<SignUP> createState() => _SignUPState();
@@ -16,12 +14,10 @@ class SignUP extends StatefulWidget {
 class _SignUPState extends State<SignUP> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController =
-      new TextEditingController(text: "");
-  final TextEditingController nameController =
-      new TextEditingController(text: "");
+  final TextEditingController emailController = TextEditingController(text: "");
+  final TextEditingController nameController = TextEditingController(text: "");
   final TextEditingController descriptionController =
-      new TextEditingController(text: "");
+      TextEditingController(text: "");
 
   @override
   void dispose() {
@@ -59,8 +55,8 @@ class _SignUPState extends State<SignUP> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Signup"),
-            Text("""APP_ENV=${widget.env_values["APP_ENV"]}""")
+            const Text("Signup"),
+            Text("""APP_ENV=${const String.fromEnvironment("APP_ENV")}""")
           ],
         ),
         // automaticallyImplyLeading: false,
@@ -70,8 +66,8 @@ class _SignUPState extends State<SignUP> {
         scrollDirection: Axis.vertical,
         child: Container(
           color: Colors.grey[200],
-          margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -103,7 +99,7 @@ class _SignUPState extends State<SignUP> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: emailController,
                   cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
@@ -129,7 +125,7 @@ class _SignUPState extends State<SignUP> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   controller: descriptionController,
                   cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
@@ -159,7 +155,7 @@ class _SignUPState extends State<SignUP> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 ElevatedButton(
                   onPressed: signUp,
                   child: Row(

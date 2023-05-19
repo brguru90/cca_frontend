@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cca_vijayapura/services/secure_store.dart';
 import 'package:cca_vijayapura/services/temp_store.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Future<Map<dynamic, dynamic>> exeFetch(
 //     {required String uri,
@@ -72,7 +71,7 @@ Future<Map<dynamic, dynamic>> exeFetch({
   late HttpClientRequest request;
 
   Uri FullURI = Uri.parse(
-      """${dotenv.env["SERVER_PROTOCOL"]}://${dotenv.env["SERVER_HOST"]}:${dotenv.env["SERVER_PORT"]}/$uri""");
+      """${const String.fromEnvironment("SERVER_PROTOCOL")}://${const String.fromEnvironment("SERVER_HOST")}:${const String.fromEnvironment("SERVER_PORT")}/$uri""");
 
   try {
     switch (method) {

@@ -11,6 +11,12 @@
       "type": "dart",
       "flutterMode": "debug",
       "preLaunchTask": "connect_mobile",
+      "env": {
+        "APP_ENV": "development",
+        "SERVER_HOST": "localhost",
+        "SERVER_PROTOCOL": "development",
+        "SERVER_PORT": "http"
+      }
     },
     {
       "name": "cca (debug using remote server)",
@@ -19,7 +25,13 @@
       "type": "dart",
       "flutterMode": "debug",
       "preLaunchTask": "connect_mobile",
-      "args": ["--dart-define", "RELEASE_MODE=true"]
+      "args": ["--dart-define", "RELEASE_MODE=true"],
+      "env": {
+        "APP_ENV": "development",
+        "SERVER_HOST": "localhost",
+        "SERVER_PROTOCOL": "development",
+        "SERVER_PORT": "http"
+      }
     },
     {
       "name": "cca (profile mode)",
@@ -28,7 +40,13 @@
       "type": "dart",
       "flutterMode": "profile",
       "preLaunchTask": "connect_mobile",
-      "args": ["--no-sound-null-safety", "--dart-define", "RELEASE_MODE=true"]
+      "args": ["--no-sound-null-safety", "--dart-define", "RELEASE_MODE=true"],
+      "env": {
+        "APP_ENV": "development",
+        "SERVER_HOST": "localhost",
+        "SERVER_PROTOCOL": "development",
+        "SERVER_PORT": "http"
+      }
     },
     {
       "name": "cca (release mode)",
@@ -37,7 +55,13 @@
       "type": "dart",
       "flutterMode": "release",
       "preLaunchTask": "connect_mobile",
-      "args": ["--dart-define", "RELEASE_MODE=true"]
-    },
+      "args": ["--dart-define", "RELEASE_MODE=true"],
+      "env":{
+        "APP_ENV":"development",
+        "SERVER_HOST":"localhost",
+        "SERVER_PROTOCOL":"development",
+        "SERVER_PORT":"http",
+      },
+    }
   ]
 }

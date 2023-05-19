@@ -1,10 +1,15 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "connect_mobile",
-            "command": "adb reverse tcp:8000 tcp:8000",
-            "type": "shell",
-        },
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "connect_mobile",
+      "command": "adb reverse tcp:8000 tcp:8000",
+      "type": "shell"
+    },
+    {
+      "label": "register build key",
+      "command": "curl -X 'POST'  'http://127.0.0.1:8000/api/register_build' -H 'accept: application/json' -H 'Content-Type: multipart/form-data' -F 'app_id=1' -F 'app_secret=sqdd' -F 'auth_key=1234'",
+      "type": "shell"
+    }
+  ]
 }

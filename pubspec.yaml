@@ -54,6 +54,9 @@ dependencies:
   google_api_availability: ^5.0.0
   carousel_slider: ^4.2.1
   bottom_bar_page_transition: ^2.0.0
+  # lecle_yoyo_player: ^0.0.5+2
+  lecle_yoyo_player:
+    path: ./lecle_yoyo_player
 
 dev_dependencies:
   flutter_test:

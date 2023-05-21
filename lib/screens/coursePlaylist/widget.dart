@@ -1,7 +1,35 @@
+import 'dart:convert';
+
 import 'package:cca_vijayapura/screens/coursePlaylist/playlistSlider/widget.dart';
 import 'package:cca_vijayapura/screens/home/bottomNavBar.dart';
 import 'package:cca_vijayapura/screens/home/header.dart';
+import 'package:cca_vijayapura/services/http_request.dart';
+import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:flutter/material.dart';
+
+class PlaylistVideo {
+  final String id;
+  final String title;
+  final String linkToVideoPreviewImage;
+
+  PlaylistVideo({
+    required this.id,
+    required this.title,
+    required this.linkToVideoPreviewImage,
+  });
+}
+
+class Playlist {
+  final String id;
+  final String title;
+  final List<PlaylistVideo> videos;
+
+  Playlist({
+    required this.id,
+    required this.title,
+    required this.videos,
+  });
+}
 
 class CoursePlaylist extends StatefulWidget {
   const CoursePlaylist({Key? key}) : super(key: key);
@@ -13,6 +41,42 @@ class CoursePlaylist extends StatefulWidget {
 class _CoursePlaylistState extends State<CoursePlaylist> {
   ScrollController scrollController = ScrollController();
   double scrollCount = 0;
+
+  List<Playlist> playlists = [];
+
+  void fetchPlaylist() {
+    exeFetch(
+      uri: "/api/user/get_playlists/",
+    ).then((body) {
+      final data = jsonDecode(body["body"])["data"] as List;
+      shared_logger.d(data);
+      setState(() {
+        playlists = data.map((playlist) {
+          return Playlist(
+            id: playlist["_id"],
+            title: playlist["title"],
+            videos: (playlist["videos_ids"] as List).map((video) {
+              return PlaylistVideo(
+                id: video["video_id"],
+                title: video["title"],
+                linkToVideoPreviewImage: video["link_to_video_preview_image"],
+              );
+            }).toList(),
+          );
+        }).toList();
+      });
+      shared_logger.d(playlists);
+    }).catchError((e, s) {
+      shared_logger.e(e);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchPlaylist();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +147,17 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Column(
-                              children: const [
-                                PlaylistSlider(),
-                                PlaylistSlider(),
-                                PlaylistSlider(),
-                                PlaylistSlider(),
-                                SizedBox(height: 10),
-                              ],
+                              // children: const [
+                              //   PlaylistSlider(),
+                              //   PlaylistSlider(),
+                              //   PlaylistSlider(),
+                              //   PlaylistSlider(),
+                              //   SizedBox(height: 10),
+                              // ],
+                              children: playlists
+                                  .map((playlist) =>
+                                      PlaylistSlider(playlist: playlist))
+                                  .toList(),
                             ),
                           ),
                         ),

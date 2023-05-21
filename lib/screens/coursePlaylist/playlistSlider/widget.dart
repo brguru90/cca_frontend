@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cca_vijayapura/screens/coursePlaylist/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PlaylistSlider extends StatefulWidget {
-  const PlaylistSlider({Key? key}) : super(key: key);
+  final Playlist playlist;
+  const PlaylistSlider({Key? key, required this.playlist}) : super(key: key);
 
   @override
   State<PlaylistSlider> createState() => _PlaylistSliderState();
@@ -13,6 +15,10 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
   final items = [1, 2, 3, 4, 5];
   int currentSlide = 0;
   bool autoPlay = false;
+
+  Uri base_url = Uri.parse(
+      """${const String.fromEnvironment("SERVER_PROTOCOL")}://${const String.fromEnvironment("SERVER_HOST")}:${const String.fromEnvironment("SERVER_PORT")}""");
+
   final CarouselController _controller = CarouselController();
 
   @override
@@ -71,8 +77,9 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
             // enlargeCenterPage: true,
             onPageChanged: (i, _) => setState(() => currentSlide = i),
           ),
-          items: items.asMap().entries.map((item) {
+          items: widget.playlist.videos.asMap().entries.map((item) {
             final i = item.key;
+            final video = item.value;
             return Builder(
               builder: (BuildContext context) {
                 return Container(
@@ -90,22 +97,20 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                           //   color: const Color(0xFF6750A3),
                           //   borderRadius: BorderRadius.circular(18.0),
                           // ),
-                          child: Flexible(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Image.asset(
-                                "assets/images/course.png",
-                                fit: BoxFit.cover,
-                              ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.network(
+                              "$base_url${video.linkToVideoPreviewImage}",
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
                         child: Text(
-                          "Introduction to course",
-                          style: TextStyle(
+                          video.title,
+                          style: const TextStyle(
                             fontSize: 16.0,
                             color: Color.fromARGB(255, 0, 0, 0),
                             fontWeight: FontWeight.bold,

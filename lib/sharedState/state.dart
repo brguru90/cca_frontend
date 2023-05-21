@@ -1,4 +1,5 @@
 import 'package:cca_vijayapura/services/temp_store.dart';
+import 'package:cca_vijayapura/sharedState/types/add_cart.dart';
 import 'package:cca_vijayapura/sharedState/types/user_type.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,5 +16,12 @@ SharedState<UserType?> userData = SharedState<UserType?>(
     "auth_provider": "fake",
   },
   parseToType: (state) => UserType.mapToClass(state),
+  parseToTMap: (state) => state?.toMap() ?? {},
+);
+
+SharedState<CartData?> cartData = SharedState<CartData?>(
+  key: "cart_data",
+  initialState: {},
+  parseToType: (state) => CartData.mapToClass(state),
   parseToTMap: (state) => state?.toMap() ?? {},
 );

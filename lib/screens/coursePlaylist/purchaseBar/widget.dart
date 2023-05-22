@@ -9,8 +9,12 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PlaylistPurchaseSummaryView extends StatefulWidget {
   final List<Playlist> selectedPlaylists;
-  const PlaylistPurchaseSummaryView({Key? key, required this.selectedPlaylists})
-      : super(key: key);
+  final Function() reloadSubscriptionStatus;
+  const PlaylistPurchaseSummaryView({
+    Key? key,
+    required this.selectedPlaylists,
+    required this.reloadSubscriptionStatus,
+  }) : super(key: key);
 
   @override
   State<PlaylistPurchaseSummaryView> createState() =>
@@ -19,6 +23,8 @@ class PlaylistPurchaseSummaryView extends StatefulWidget {
 
 class _PlaylistPurchaseSummaryViewState
     extends State<PlaylistPurchaseSummaryView> {
+  Map orderData = {};
+
   void handlePaymentErrorResponse(PaymentFailureResponse response) {
     /*
     * PaymentFailureResponse contains three values:
@@ -37,8 +43,9 @@ class _PlaylistPurchaseSummaryViewState
     * 2. Payment ID
     * 3. Signature
     * */
-    showAlertDialog(context, "Payment Successful",
-        "Payment ID: ${response.paymentId},${response.orderId},${response.signature}");
+    // showAlertDialog(context, "Payment Successful",
+    //     "Payment ID: ${response.paymentId},${response.orderId},${response.signature}");
+    verifyPaymentStatus();
   }
 
   void handleExternalWalletSelected(ExternalWalletResponse response) {
@@ -96,6 +103,26 @@ class _PlaylistPurchaseSummaryViewState
     razorpay.open(options);
   }
 
+  void verifyPaymentStatus() {
+    List<String> playlists =
+        widget.selectedPlaylists.map((playlist) => playlist.id).toList();
+    exeFetch(
+      uri:
+          """/api/user/confirm_payment_for_subscription/?order_id=${orderData["_id"]}""",
+    ).then((body) {
+      final data = jsonDecode(body["body"])["data"];
+      shared_logger.d(data);
+      if (data["payment_status"]) {
+        ToastMessage.success("payment success");
+      } else {
+        ToastMessage.error("payment failed");
+      }
+      widget.reloadSubscriptionStatus();
+    }).catchError((e, s) {
+      shared_logger.e(e);
+    });
+  }
+
   void createOrder() {
     List<String> playlists =
         widget.selectedPlaylists.map((playlist) => playlist.id).toList();
@@ -106,24 +133,8 @@ class _PlaylistPurchaseSummaryViewState
     ).then((body) {
       final data = jsonDecode(body["body"])["data"];
       shared_logger.d(data);
+      orderData = data;
       InvokePaymentGateway(orderId: data["order_id"], amount: data["amount"]);
-      // setState(() {
-      //   playlists = data.map((playlist) {
-      //     return Playlist(
-      //       id: playlist["_id"],
-      //       title: playlist["title"],
-      //       price: playlist["price"],
-      //       videos: (playlist["videos_ids"] as List).map((video) {
-      //         return PlaylistVideo(
-      //           id: video["video_id"],
-      //           title: video["title"],
-      //           linkToVideoPreviewImage: video["link_to_video_preview_image"],
-      //         );
-      //       }).toList(),
-      //     );
-      //   }).toList();
-      // });
-      // shared_logger.d(playlists);
     }).catchError((e, s) {
       shared_logger.e(e);
     });

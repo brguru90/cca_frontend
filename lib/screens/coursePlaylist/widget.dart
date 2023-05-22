@@ -49,8 +49,8 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
 
   List<Playlist> playlists = [];
 
-  Map<String, bool> playlistSubscription = {};
-  Map<String, bool> packageSubscription = {};
+  Map<String, String?> playlistSubscription = {};
+  Map<String, String?> packageSubscription = {};
 
   void fetchPlaylist() {
     exeFetch(
@@ -89,8 +89,10 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
       setState(() {
         setState(() {
           for (var subscription in data) {
-            playlistSubscription[subscription["playlist_id"]];
-            packageSubscription[subscription["subscription_package_id"]];
+            playlistSubscription[subscription["playlist_id"]] =
+                subscription["expired_on"];
+            packageSubscription[subscription["subscription_package_id"]] =
+                subscription["expired_on"];
           }
         });
       });
@@ -240,7 +242,12 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                 ),
               ),
               PlaylistPurchaseSummaryView(
-                  selectedPlaylists: selectedForPurchase)
+                selectedPlaylists: selectedForPurchase,
+                reloadSubscriptionStatus: () {
+                  fetchSubscriptions();
+                  fetchPlaylist();
+                },
+              )
             ],
           ),
         ),

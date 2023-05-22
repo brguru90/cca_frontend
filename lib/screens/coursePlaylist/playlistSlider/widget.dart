@@ -5,7 +5,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class PlaylistSlider extends StatefulWidget {
   final Playlist playlist;
-  const PlaylistSlider({Key? key, required this.playlist}) : super(key: key);
+  final bool paid;
+  final Function() onBuyClick;
+  const PlaylistSlider({
+    Key? key,
+    required this.playlist,
+    this.paid = false,
+    required this.onBuyClick,
+  }) : super(key: key);
 
   @override
   State<PlaylistSlider> createState() => _PlaylistSliderState();
@@ -21,6 +28,25 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
 
   final CarouselController _controller = CarouselController();
 
+  Widget purchaseSelectedStatus({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 2,
+        vertical: 2,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5.0),
+        border: Border.all(
+          color:
+              widget.playlist.selectedForPurchase ? Colors.green : Colors.white,
+          width: 2,
+        ),
+      ),
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,12 +57,74 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Text(
-                "PC/PCI",
-                style: TextStyle(
-                    fontSize: 24.0,
-                    color: Color(0xFF6750A3),
-                    fontWeight: FontWeight.w800),
+              Row(
+                children: [
+                  const Text(
+                    "PC/PCI",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      color: Color(0xFF6750A3),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  ...(() {
+                    if (!widget.paid) {
+                      return [
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        GestureDetector(
+                          onTap: widget.onBuyClick,
+                          child: purchaseSelectedStatus(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    "Buy for ",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      wordSpacing: 0,
+                                      letterSpacing: 0,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                    child: Icon(
+                                      Icons.currency_rupee,
+                                      color: Colors.white,
+                                      size: 12,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${widget.playlist.price}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      wordSpacing: 0,
+                                      letterSpacing: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ];
+                    }
+                    return [const SizedBox()];
+                  })(),
+                ],
               ),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/playlist_videos'),
@@ -101,7 +189,7 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                             borderRadius: BorderRadius.circular(10.0),
                             child: Image.network(
                               "$base_url${video.linkToVideoPreviewImage}",
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                             ),
                           ),
                         ),

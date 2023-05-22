@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cca_vijayapura/screens/coursePlaylist/playlistSlider/widget.dart';
+import 'package:cca_vijayapura/screens/coursePlaylist/purchaseBar/widget.dart';
 import 'package:cca_vijayapura/screens/home/bottomNavBar.dart';
 import 'package:cca_vijayapura/screens/home/header.dart';
 import 'package:cca_vijayapura/services/http_request.dart';
@@ -22,12 +23,16 @@ class PlaylistVideo {
 class Playlist {
   final String id;
   final String title;
+  final int price;
+  bool selectedForPurchase;
   final List<PlaylistVideo> videos;
 
   Playlist({
     required this.id,
     required this.title,
     required this.videos,
+    required this.price,
+    this.selectedForPurchase = false,
   });
 }
 
@@ -44,6 +49,9 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
 
   List<Playlist> playlists = [];
 
+  Map<String, bool> playlistSubscription = {};
+  Map<String, bool> packageSubscription = {};
+
   void fetchPlaylist() {
     exeFetch(
       uri: "/api/user/get_playlists/",
@@ -55,6 +63,7 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
           return Playlist(
             id: playlist["_id"],
             title: playlist["title"],
+            price: playlist["price"],
             videos: (playlist["videos_ids"] as List).map((video) {
               return PlaylistVideo(
                 id: video["video_id"],
@@ -71,15 +80,40 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
     });
   }
 
+  void fetchSubscriptions() {
+    exeFetch(
+      uri: "/api/user/get_user_subscriptions/",
+    ).then((body) {
+      final data = jsonDecode(body["body"])["data"] as List;
+      shared_logger.d(data);
+      setState(() {
+        setState(() {
+          for (var subscription in data) {
+            playlistSubscription[subscription["playlist_id"]];
+            packageSubscription[subscription["subscription_package_id"]];
+          }
+        });
+      });
+      shared_logger.d(playlistSubscription);
+      shared_logger.d(packageSubscription);
+    }).catchError((e, s) {
+      shared_logger.e(e);
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchPlaylist();
+    fetchSubscriptions();
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectedForPurchase =
+        playlists.where((playlist) => playlist.selectedForPurchase).toList();
+
     return Scaffold(
       // appBar: AppBar(
       //   title: const HomeHeader(),
@@ -147,16 +181,25 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Column(
-                              // children: const [
-                              //   PlaylistSlider(),
-                              //   PlaylistSlider(),
-                              //   PlaylistSlider(),
-                              //   PlaylistSlider(),
-                              //   SizedBox(height: 10),
-                              // ],
                               children: playlists
-                                  .map((playlist) =>
-                                      PlaylistSlider(playlist: playlist))
+                                  .asMap()
+                                  .entries
+                                  .map(
+                                    (item) => PlaylistSlider(
+                                      playlist: item.value,
+                                      paid:
+                                          playlistSubscription[item.value.id] !=
+                                              null,
+                                      onBuyClick: () {
+                                        setState(() {
+                                          playlists[item.key]
+                                                  .selectedForPurchase =
+                                              !playlists[item.key]
+                                                  .selectedForPurchase;
+                                        });
+                                      },
+                                    ),
+                                  )
                                   .toList(),
                             ),
                           ),
@@ -196,6 +239,8 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                   ],
                 ),
               ),
+              PlaylistPurchaseSummaryView(
+                  selectedPlaylists: selectedForPurchase)
             ],
           ),
         ),

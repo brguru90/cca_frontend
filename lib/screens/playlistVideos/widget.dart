@@ -3,6 +3,21 @@ import 'package:cca_vijayapura/screens/home/header.dart';
 import 'package:cca_vijayapura/screens/playlistVideos/videosSlider/widget.dart';
 import 'package:flutter/material.dart';
 
+class VideoLists {
+  final String id, title, description, createdBy;
+  final String linkToVideoPreviewImage, linkToVideoStream, videoDecryptionKey;
+
+  VideoLists({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.createdBy,
+    required this.linkToVideoPreviewImage,
+    required this.linkToVideoStream,
+    required this.videoDecryptionKey,
+  });
+}
+
 class PlaylistVideos extends StatefulWidget {
   const PlaylistVideos({Key? key}) : super(key: key);
 

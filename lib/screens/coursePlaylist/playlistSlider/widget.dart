@@ -127,7 +127,11 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                 ],
               ),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/playlist_videos'),
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  '/playlist_videos',
+                  arguments: widget.playlist,
+                ),
                 child: Row(
                   children: [
                     SvgPicture.asset(

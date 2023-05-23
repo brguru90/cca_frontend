@@ -68,6 +68,7 @@ Future<Map<dynamic, dynamic>> exeFetch({
     uri = uri.substring(1);
   }
   var client = HttpClient();
+  // var client = MyHttpInterceptor();
   late HttpClientRequest request;
 
   Uri FullURI = Uri.parse(

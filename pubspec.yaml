@@ -57,6 +57,9 @@ dependencies:
   # lecle_yoyo_player: ^0.0.5+2
   lecle_yoyo_player:
     path: ./lecle_yoyo_player
+  encrypt: ^5.0.1
+  archive: ^3.3.7
+  http_interceptor: ^1.0.2
 
 dev_dependencies:
   flutter_test:

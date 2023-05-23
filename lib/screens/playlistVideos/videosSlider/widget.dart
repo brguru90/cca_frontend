@@ -1,10 +1,23 @@
 import 'dart:convert';
 
 import 'package:cca_vijayapura/screens/coursePlaylist/widget.dart';
-import 'package:cca_vijayapura/screens/playlistVideos/widget.dart';
 import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:flutter/material.dart';
+
+class VideoLists {
+  final String id, title, description, createdBy;
+  final String linkToVideoPreviewImage, linkToVideoStream;
+
+  VideoLists({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.createdBy,
+    required this.linkToVideoPreviewImage,
+    required this.linkToVideoStream,
+  });
+}
 
 class VideosSlider extends StatefulWidget {
   const VideosSlider({Key? key}) : super(key: key);
@@ -36,7 +49,6 @@ class _VideosSliderState extends State<VideosSlider> {
             createdBy: video["created_by_user"],
             linkToVideoPreviewImage: video["link_to_video_preview_image"],
             linkToVideoStream: video["link_to_video_stream"],
-            videoDecryptionKey: video["video_decryption_key"],
           );
         }).toList();
       });
@@ -63,55 +75,62 @@ class _VideosSliderState extends State<VideosSlider> {
           final video = item.value;
           return Padding(
             padding: EdgeInsets.only(top: item.key == 0 ? 0 : 20),
-            child: SizedBox(
-              height: 110,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        "assets/images/course.png",
-                        fit: BoxFit.cover,
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(
+                context,
+                '/watch_video',
+                arguments: video,
+              ),
+              child: SizedBox(
+                height: 110,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Image.asset(
+                          "assets/images/course.png",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          video.title.toString(),
-                          style: const TextStyle(
-                            fontSize: 22.0,
-                            color: Color(0xFF6750A3),
-                            fontWeight: FontWeight.bold,
+                    const SizedBox(width: 10),
+                    Flexible(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            video.title.toString(),
+                            style: const TextStyle(
+                              fontSize: 22.0,
+                              color: Color(0xFF6750A3),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          video.createdBy.toString(),
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            color: Color(0xFFFF0099),
-                            fontWeight: FontWeight.bold,
+                          const SizedBox(height: 10),
+                          Text(
+                            video.createdBy.toString(),
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Color(0xFFFF0099),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const Text(
-                          "1 Hour 10 Mins",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Color(0xFF595959),
+                          const Text(
+                            "1 Hour 10 Mins",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Color(0xFF595959),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );

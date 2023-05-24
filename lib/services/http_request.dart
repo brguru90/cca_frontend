@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cca_vijayapura/services/debug_server.dart';
 import 'package:cca_vijayapura/services/secure_store.dart';
 import 'package:cca_vijayapura/services/temp_store.dart';
 
@@ -64,6 +65,8 @@ Future<Map<dynamic, dynamic>> exeFetch({
   navigateToIfNotAllowed ??= (a) {};
   Future<Map<dynamic, dynamic>> future;
 
+  bool forwardToLocal = uri.startsWith("/forward");
+
   if (uri.startsWith("/")) {
     uri = uri.substring(1);
   }
@@ -73,7 +76,10 @@ Future<Map<dynamic, dynamic>> exeFetch({
 
   Uri FullURI = Uri.parse(
       """${const String.fromEnvironment("SERVER_PROTOCOL")}://${const String.fromEnvironment("SERVER_HOST")}:${const String.fromEnvironment("SERVER_PORT")}/$uri""");
-
+  if (forwardToLocal) {
+    FullURI =
+        Uri.parse("""http://$DEBUG_SERVER_HOST:$DEBUG_SERVER_PORT/$uri""");
+  }
   try {
     switch (method) {
       case "post":

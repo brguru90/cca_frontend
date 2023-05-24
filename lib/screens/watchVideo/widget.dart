@@ -17,6 +17,7 @@ class _WatchVideoState extends State<WatchVideo> {
     setState(() {
       videoData = video;
     });
+    // exeFetch(uri: "/forward/test");
     // exeFetch(
     //   uri: "/api/user/get_stream_key/",
     //   method: "post",

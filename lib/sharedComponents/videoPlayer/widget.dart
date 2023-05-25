@@ -50,7 +50,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                 child: Text("Loading video"),
               ),
             ),
-            allowCacheFile: false,
+            allowCacheFile: true,
             onCacheFileCompleted: (files) {
               print('Cached file length ::: ${files?.length}');
 

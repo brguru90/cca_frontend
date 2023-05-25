@@ -55,7 +55,7 @@ class _WatchVideoState extends State<WatchVideo> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          child: videoData != null
+          child: videoData != null && videoData!.paid
               ? CustomVideoPlayer(
                   videoUrl: "$FullURI${videoData!.linkToVideoStream}")
               : const SizedBox(),

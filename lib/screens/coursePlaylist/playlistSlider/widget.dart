@@ -130,7 +130,7 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                 onTap: () => Navigator.pushNamed(
                   context,
                   '/playlist_videos',
-                  arguments: widget.playlist,
+                  arguments: {"playlist": widget.playlist, "paid": widget.paid},
                 ),
                 child: Row(
                   children: [

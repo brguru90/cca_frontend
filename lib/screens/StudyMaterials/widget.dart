@@ -1,6 +1,11 @@
-import 'package:cca_vijayapura/screens/StudyMaterials/videosSlider/widget.dart';
+import 'dart:convert';
+
+import 'package:cca_vijayapura/screens/StudyMaterials/docSlider/widget.dart';
+import 'package:cca_vijayapura/screens/StudyMaterials/purchaseBar/widget.dart';
 import 'package:cca_vijayapura/screens/home/bottomNavBar.dart';
 import 'package:cca_vijayapura/screens/home/header.dart';
+import 'package:cca_vijayapura/services/http_request.dart';
+import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:flutter/material.dart';
 
 class StudyMaterials extends StatefulWidget {
@@ -13,9 +18,67 @@ class StudyMaterials extends StatefulWidget {
 class _StudyMaterialsState extends State<StudyMaterials> {
   ScrollController scrollController = ScrollController();
   double scrollCount = 0;
+  List<DocumentLists> docList = [];
+  Map<String, String?> docsSubscription = {};
+
+  void fetchStudyMaterialList() {
+    exeFetch(uri: "/api/user/study_materials/").then((body) {
+      final data = jsonDecode(body["body"])["data"] as List;
+      shared_logger.d(data);
+      setState(() {
+        docList = data.map((doc) {
+          return DocumentLists(
+            id: doc["_id"],
+            title: doc["title"],
+            description: doc["description"],
+            createdBy: doc["created_by_user"],
+            linkToBookCoverImage: doc["link_to_book_cover_image"],
+            linkToDocument: doc["link_to_doc_file"],
+            price: doc["price"],
+          );
+        }).toList();
+      });
+      shared_logger.d(docList);
+    }).catchError((e, s) {
+      shared_logger.e(e);
+    });
+  }
+
+  void fetchSubscriptions() {
+    exeFetch(
+      uri: "/api/user/get_user_study_material_subscriptions/",
+    ).then((body) {
+      final data = jsonDecode(body["body"])["data"] as List;
+      shared_logger.d(data);
+      setState(() {
+        setState(() {
+          for (var subscription in data) {
+            docsSubscription[subscription["study_material_id"]] =
+                subscription["expired_on"];
+          }
+        });
+      });
+      shared_logger.d(docsSubscription);
+    }).catchError((e, s) {
+      shared_logger.e(e);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchStudyMaterialList();
+      fetchSubscriptions();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final selectedForPurchase =
+        docList.where((doc) => doc.selectedForPurchase).toList();
+
     return Scaffold(
       // appBar: AppBar(
       //   title: const HomeHeader(),
@@ -80,9 +143,18 @@ class _StudyMaterialsState extends State<StudyMaterials> {
                         },
                         child: SingleChildScrollView(
                           controller: scrollController,
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: DocSlider(),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: DocSlider(
+                              docList: docList,
+                              subscription: docsSubscription,
+                              onPurchaseClick: (index) {
+                                setState(() {
+                                  docList[index].selectedForPurchase =
+                                      !docList[index].selectedForPurchase;
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -120,6 +192,13 @@ class _StudyMaterialsState extends State<StudyMaterials> {
                   ],
                 ),
               ),
+              StudyMaterialPurchaseSummaryView(
+                selectedStudymaterials: selectedForPurchase,
+                reloadSubscriptionStatus: () {
+                  fetchSubscriptions();
+                  fetchStudyMaterialList();
+                },
+              )
             ],
           ),
         ),

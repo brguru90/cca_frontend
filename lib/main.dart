@@ -1,3 +1,4 @@
+import 'package:cca_vijayapura/screens/StudyMaterials/widget.dart';
 import 'package:cca_vijayapura/screens/coursePlaylist/widget.dart';
 import 'package:cca_vijayapura/screens/home/widget.dart';
 import 'package:cca_vijayapura/screens/landing/widget.dart';
@@ -67,6 +68,7 @@ void mapRoutes() {
       "/user_profile": (context) => const UserProfile(),
       "/course_playlist": (context) => const CoursePlaylist(),
       "/playlist_videos": (context) => const PlaylistVideos(),
+      "/study_materials": (context) => const StudyMaterials(),
     },
   )));
 }

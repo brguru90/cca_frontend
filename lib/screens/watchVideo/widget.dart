@@ -57,7 +57,9 @@ class _WatchVideoState extends State<WatchVideo> {
         body: Container(
           child: videoData != null && videoData!.paid
               ? CustomVideoPlayer(
-                  videoUrl: "$FullURI${videoData!.linkToVideoStream}")
+                  videoUrl: "$FullURI${videoData!.linkToVideoStream}",
+                  fullscreen: true,
+                )
               : const SizedBox(),
         ),
       ),

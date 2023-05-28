@@ -1,9 +1,10 @@
+import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
 import 'package:flutter/material.dart';
 
 class DocumentLists {
   final String id, title, description, createdBy;
   final String linkToBookCoverImage, linkToDocument;
-  final int price;
+  final int price, blockSize;
   bool selectedForPurchase;
 
   DocumentLists({
@@ -14,6 +15,7 @@ class DocumentLists {
     required this.linkToBookCoverImage,
     required this.linkToDocument,
     required this.price,
+    required this.blockSize,
     this.selectedForPurchase = false,
   });
 }
@@ -72,13 +74,27 @@ class _DocSliderState extends State<DocSlider> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Flexible(
-                      flex: 1,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                          imagePreviewUrl,
-                          fit: BoxFit.cover,
+                    GestureDetector(
+                      onTap: () => {
+                        if (widget.subscription[item.value.id] != null)
+                          {
+                            Navigator.pushNamed(
+                              context,
+                              '/doc_viewer',
+                              arguments: doc,
+                            )
+                          }
+                        else
+                          {ToastMessage.info("Please purchase before view")}
+                      },
+                      child: Flexible(
+                        flex: 1,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.network(
+                            imagePreviewUrl,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),

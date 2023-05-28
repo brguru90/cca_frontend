@@ -1,5 +1,6 @@
 import 'package:cca_vijayapura/screens/StudyMaterials/widget.dart';
 import 'package:cca_vijayapura/screens/coursePlaylist/widget.dart';
+import 'package:cca_vijayapura/screens/documentViwers/pdfViewer/widget.dart';
 import 'package:cca_vijayapura/screens/home/widget.dart';
 import 'package:cca_vijayapura/screens/landing/widget.dart';
 import 'package:cca_vijayapura/screens/login/screen.dart';
@@ -69,6 +70,7 @@ void mapRoutes() {
       "/course_playlist": (context) => const CoursePlaylist(),
       "/playlist_videos": (context) => const PlaylistVideos(),
       "/study_materials": (context) => const StudyMaterials(),
+      "/doc_viewer": (context) => const PDFViwerWrap(),
     },
   )));
 }

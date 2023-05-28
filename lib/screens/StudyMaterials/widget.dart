@@ -35,6 +35,7 @@ class _StudyMaterialsState extends State<StudyMaterials> {
             linkToBookCoverImage: doc["link_to_book_cover_image"],
             linkToDocument: doc["link_to_doc_file"],
             price: doc["price"],
+            blockSize: doc["file_decryption_key_blk_size"],
           );
         }).toList();
       });

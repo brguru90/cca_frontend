@@ -80,9 +80,9 @@ class _PDFViwerWrapState extends State<PDFViwerWrap> {
       String decryptionKey = values[0];
       String fileBytes = values[1];
 
-      final decryptedBytes =
-          DecryptAES(decryptionKey, doc.blockSize, fileBytes);
-      final Uint8List fileBytes0 = Uint8List.fromList(decryptedBytes.codeUnits);
+      final decryptedStr = DecryptAES(decryptionKey, doc.blockSize, fileBytes);
+      final fileBytes0 = base64.decode(decryptedStr);
+      // final Uint8List fileBytes0 = Uint8List.fromList(decryptedBytes.codeUnits);
       var s = fileBytes0.buffer
           .asUint8List()
           .map((e) => e.toRadixString(16).padLeft(2, '0'))
@@ -135,7 +135,7 @@ class _PDFViwerWrapState extends State<PDFViwerWrap> {
           height: double.infinity,
           child: PDFView(
             pdfData: pdfData,
-            enableSwipe: false,
+            enableSwipe: true,
             swipeHorizontal: true,
             autoSpacing: false,
             pageFling: true,

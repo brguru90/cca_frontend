@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cca_vijayapura/screens/StudyMaterials/docSlider/widget.dart';
+import 'package:cca_vijayapura/screens/StudyMaterials/filter_docs.dart';
 import 'package:cca_vijayapura/screens/StudyMaterials/purchaseBar/widget.dart';
 import 'package:cca_vijayapura/screens/home/bottomNavBar.dart';
 import 'package:cca_vijayapura/screens/home/header.dart';
@@ -19,24 +21,67 @@ class _StudyMaterialsState extends State<StudyMaterials> {
   ScrollController scrollController = ScrollController();
   double scrollCount = 0;
   List<DocumentLists> docList = [];
+  List<String> categories = [];
+  String selectedCategories = "", selectedSort = "Title", currentTitle = "";
   Map<String, String?> docsSubscription = {};
+  double currentPage = 1, maxPage = 1;
+
+  void sortDocLis(value) {
+    setState(() {
+      selectedSort = value;
+    });
+    if (selectedSort == "Title") {
+      setState(() {
+        docList.sort((a, b) => a.title.compareTo(b.title));
+      });
+    } else if (selectedSort == "Date") {
+      docList.sort((a, b) => a.lastUpdated.compareTo(b.lastUpdated));
+    }
+  }
 
   void fetchStudyMaterialList() {
-    exeFetch(uri: "/api/user/study_materials/").then((body) {
+    // ?search_title=dsgvd&search_category=fgnfh&page=1
+    String uri = "/api/user/study_materials/?page=${currentPage.round()}";
+    if (currentTitle != "") {
+      uri += "&search_title=$currentTitle";
+    }
+    if (selectedCategories != "" && selectedCategories != "None") {
+      uri += "&search_category=$selectedCategories";
+    }
+
+    exeFetch(uri: uri).then((body) {
+      final data = jsonDecode(body["body"])["data"];
+      shared_logger.d(data);
+      setState(() {
+        maxPage = data["count"] / data["page_size"];
+        docList = (data["list"] as List).map((doc) {
+          return DocumentLists(
+              id: doc["_id"],
+              title: doc["title"],
+              description: doc["description"],
+              createdBy: doc["created_by_user"],
+              category: doc["category"],
+              linkToBookCoverImage: doc["link_to_book_cover_image"],
+              linkToDocument: doc["link_to_doc_file"],
+              price: doc["price"],
+              blockSize: doc["file_decryption_key_blk_size"],
+              lastUpdated: DateTime.parse(doc["updatedAt"]));
+        }).toList();
+        sortDocLis("Title");
+      });
+      shared_logger.d(docList);
+    }).catchError((e, s) {
+      shared_logger.e(e);
+    });
+  }
+
+  void fetchStudyMaterialCategories() {
+    exeFetch(uri: "/api/user/study_materials_categories/").then((body) {
       final data = jsonDecode(body["body"])["data"] as List;
       shared_logger.d(data);
       setState(() {
-        docList = data.map((doc) {
-          return DocumentLists(
-            id: doc["_id"],
-            title: doc["title"],
-            description: doc["description"],
-            createdBy: doc["created_by_user"],
-            linkToBookCoverImage: doc["link_to_book_cover_image"],
-            linkToDocument: doc["link_to_doc_file"],
-            price: doc["price"],
-            blockSize: doc["file_decryption_key_blk_size"],
-          );
+        categories = data.map((cat) {
+          return cat["title"] as String;
         }).toList();
       });
       shared_logger.d(docList);
@@ -65,6 +110,13 @@ class _StudyMaterialsState extends State<StudyMaterials> {
     });
   }
 
+  onCategoryChange(val) {
+    setState(() {
+      selectedCategories = val;
+    });
+    fetchStudyMaterialList();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -72,6 +124,7 @@ class _StudyMaterialsState extends State<StudyMaterials> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchStudyMaterialList();
       fetchSubscriptions();
+      fetchStudyMaterialCategories();
     });
   }
 
@@ -125,6 +178,35 @@ class _StudyMaterialsState extends State<StudyMaterials> {
                     ),
                   )
                 ],
+              ),
+              const SizedBox(height: 10),
+              FilterDocs(
+                categoryList: categories,
+                selectedCategory: selectedCategories,
+                onCategoryChange: onCategoryChange,
+                selectedSort: selectedSort,
+                currentPage: currentPage,
+                maxPage: maxPage,
+                onSortChange: sortDocLis,
+                onTitleChange: (title) {
+                  setState(() {
+                    currentTitle = title;
+                  });
+
+                  fetchStudyMaterialList();
+                },
+                onPageChange: (isForward) {
+                  if (isForward) {
+                    setState(() {
+                      currentPage = min(currentPage + 1, maxPage);
+                    });
+                  } else {
+                    setState(() {
+                      currentPage = max(currentPage - 1, 1);
+                    });
+                  }
+                  fetchStudyMaterialList();
+                },
               ),
               const SizedBox(height: 10),
               Expanded(

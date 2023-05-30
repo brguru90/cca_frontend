@@ -2,9 +2,10 @@ import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart'
 import 'package:flutter/material.dart';
 
 class DocumentLists {
-  final String id, title, description, createdBy;
+  final String id, title, description, createdBy, category;
   final String linkToBookCoverImage, linkToDocument;
   final int price, blockSize;
+  final DateTime lastUpdated;
   bool selectedForPurchase;
 
   DocumentLists({
@@ -12,10 +13,12 @@ class DocumentLists {
     required this.title,
     required this.description,
     required this.createdBy,
+    required this.category,
     required this.linkToBookCoverImage,
     required this.linkToDocument,
     required this.price,
     required this.blockSize,
+    required this.lastUpdated,
     this.selectedForPurchase = false,
   });
 }
@@ -99,8 +102,8 @@ class _DocSliderState extends State<DocSlider> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Flexible(
-                      flex: 1,
+                    IntrinsicHeight(
+                      // flex: 1,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -119,6 +122,14 @@ class _DocSliderState extends State<DocSlider> {
                               fontSize: 16.0,
                               color: Color(0xFFFF0099),
                               fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            doc.category,
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Color(0xFF6750A3),
+                              fontWeight: FontWeight.normal,
                             ),
                           ),
                           ...(() {

@@ -70,7 +70,8 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
               return PlaylistVideo(
                 id: video["video_id"],
                 title: video["title"],
-                linkToVideoPreviewImage: video["link_to_video_preview_image"],
+                linkToVideoPreviewImage:
+                    video["link_to_video_preview_image"] ?? "",
                 linkToVideoStream: video["link_to_video_stream"] ?? "",
               );
             }).toList(),

@@ -6,11 +6,12 @@
   "configurations": [
     {
       "name": "cca (debug)",
-      "cwd": "",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
       "preLaunchTask": "connect_mobile",
+      "cwd": "${workspaceFolder}/",
+      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env.json"],
     },
     {
       "name": "cca (debug using remote server)",
@@ -19,25 +20,7 @@
       "type": "dart",
       "flutterMode": "debug",
       "preLaunchTask": "connect_mobile",
-      "args": ["--dart-define", "RELEASE_MODE=true"]
-    },
-    {
-      "name": "cca (profile mode)",
-      "cwd": "",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "profile",
-      "preLaunchTask": "connect_mobile",
-      "args": ["--no-sound-null-safety", "--dart-define", "RELEASE_MODE=true"]
-    },
-    {
-      "name": "cca (release mode)",
-      "cwd": "",
-      "request": "launch",
-      "type": "dart",
-      "flutterMode": "release",
-      "preLaunchTask": "connect_mobile",
-      "args": ["--dart-define", "RELEASE_MODE=true"]
+      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env-prod.json"],
     },
   ]
 }

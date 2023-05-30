@@ -1,9 +1,39 @@
 import 'package:cca_vijayapura/screens/landing/body.dart';
 import 'package:cca_vijayapura/screens/landing/header.dart';
+import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:flutter/material.dart';
 
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  bool isLoading = true;
+  void checkExistingSession() {
+    setState(() {
+      isLoading = true;
+    });
+    exeFetch(
+      uri: "/api/login_status/",
+    )
+        .then((value) => Navigator.pushNamedAndRemoveUntil(
+            context, "/home", (Route<dynamic> route) => false))
+        .catchError((e) {
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    checkExistingSession();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

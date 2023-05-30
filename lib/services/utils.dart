@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
+import 'package:encrypt/encrypt.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 
 class CustomEvent {
@@ -52,4 +54,19 @@ isGooglePlayServicesAvailable() async {
     return playStoreAvailability;
   }
   return null;
+}
+
+String DecryptAES(String encKey, int blockSize, String encodedText) {
+  final encBytes = base64.decode(encodedText);
+  final initVect = base64.encode(encBytes.sublist(0, blockSize));
+  final actualEncodedText = base64.encode(encBytes.sublist(blockSize));
+
+  final key = Key.fromUtf8(encKey);
+  final iv = IV.fromBase64(initVect);
+
+  final encrypter = Encrypter(AES(key, mode: AESMode.cbc, padding: 'PKCS7'));
+  final decrypted =
+      encrypter.decrypt(Encrypted.fromBase64(actualEncodedText), iv: iv);
+
+  return decrypted;
 }

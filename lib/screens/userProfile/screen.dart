@@ -11,8 +11,7 @@ import './userProfileData/screen.dart';
 import './userSettings/screen.dart';
 
 class UserProfile extends StatefulWidget {
-  final Map<String, String> env_values;
-  const UserProfile({Key? key, this.env_values = const {}}) : super(key: key);
+  const UserProfile({Key? key}) : super(key: key);
 
   @override
   State<UserProfile> createState() => _UserProfileState();

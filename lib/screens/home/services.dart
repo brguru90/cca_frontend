@@ -30,25 +30,28 @@ class ProvidedServices extends StatelessWidget {
                 )
               ],
             ),
-            Column(
-              children: [
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Image.asset("assets/icons/courses.png",
-                      fit: BoxFit.cover),
-                ),
-                const SizedBox(height: 5),
-                const Text(
-                  "Courses",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/course_playlist'),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 80,
+                    height: 80,
+                    child: Image.asset("assets/icons/courses.png",
+                        fit: BoxFit.cover),
                   ),
-                  textAlign: TextAlign.center,
-                )
-              ],
+                  const SizedBox(height: 5),
+                  const Text(
+                    "Courses",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
             ),
           ],
         ),
@@ -56,25 +59,28 @@ class ProvidedServices extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Column(
-              children: [
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Image.asset("assets/icons/download.png",
-                      fit: BoxFit.cover),
-                ),
-                const SizedBox(height: 5),
-                const Text(
-                  "Downloads",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/study_materials'),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 80,
+                    height: 80,
+                    child: Image.asset("assets/icons/download.png",
+                        fit: BoxFit.cover),
                   ),
-                  textAlign: TextAlign.center,
-                )
-              ],
+                  const SizedBox(height: 5),
+                  const Text(
+                    "Downloads",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
             ),
             Column(
               children: [

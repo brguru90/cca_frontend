@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+
 import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginScreen extends StatefulWidget {
-  final Map<String, String> env_values;
-
-  const LoginScreen({Key? key, Map<String, String> this.env_values = const {}})
-      : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -17,8 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController =
-      new TextEditingController(text: "");
+  final TextEditingController emailController = TextEditingController(text: "");
 
   bool isLoading = true;
 
@@ -26,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     super.dispose();
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     emailController.dispose();
     print("--------dispose");
   }
@@ -34,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     checkExistingSession();
     print("--------initState");
   }
@@ -96,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
     if (isLoading) {
       return Scaffold(
           backgroundColor: Colors.blue[900],
-          body: Center(
+          body: const Center(
               child: SpinKitCircle(
             color: Colors.white,
             size: 50.0,
@@ -108,8 +105,8 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Login"),
-            Text("""APP_ENV=${widget.env_values["APP_ENV"]}""")
+            const Text("Login"),
+            Text("""APP_ENV=${const String.fromEnvironment("APP_ENV")}""")
           ],
         ),
         automaticallyImplyLeading: false,
@@ -117,8 +114,8 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
       ),
       body: Container(
         color: Colors.grey[200],
-        margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -150,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                   return null;
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: Login,
                 child: Row(
@@ -164,14 +161,14 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                       Text("Login")
                     ]),
               ),
-              SizedBox(height: 40.0),
+              const SizedBox(height: 40.0),
               Container(
                 // color: Colors.green[100],
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text("New user?"),
+                    const Text("New user?"),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -180,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                           child: TextButton(
                               style: TextButton.styleFrom(
                                 // fixedSize: Size.fromHeight(1),
-                                minimumSize: Size(0, 1),
+                                minimumSize: const Size(0, 1),
                                 padding: EdgeInsets.zero,
                               ),
                               onPressed: () =>
@@ -190,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                                 // style: TextStyle(height: 0.1),
                               )),
                         ),
-                        Text(" to sign up"),
+                        const Text(" to sign up"),
                       ],
                     ),
                     const SizedBox(
@@ -204,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                           child: TextButton(
                               style: TextButton.styleFrom(
                                 // fixedSize: Size.fromHeight(1),
-                                minimumSize: Size(0, 1),
+                                minimumSize: const Size(0, 1),
                                 padding: EdgeInsets.zero,
                               ),
                               onPressed: () =>

@@ -27,6 +27,7 @@ class _PDFViwerWrapState extends State<PDFViwerWrap> {
   int? currentPage = 0;
   bool isReady = false;
   String errorMessage = '';
+  String searchedValue = "";
 
   Future<String> getFileDecryptionKey(String docId) {
     Completer<String> c = Completer<String>();
@@ -133,42 +134,118 @@ class _PDFViwerWrapState extends State<PDFViwerWrap> {
           color: const Color.fromARGB(255, 26, 30, 28),
           width: double.infinity,
           height: double.infinity,
-          child: PDFView(
-            pdfData: pdfData,
-            enableSwipe: true,
-            swipeHorizontal: true,
-            autoSpacing: false,
-            pageFling: true,
-            pageSnap: true,
-            defaultPage: currentPage!,
-            fitPolicy: FitPolicy.BOTH,
-            onRender: (pages) {
-              setState(() {
-                pages = pages;
-                isReady = true;
-              });
-            },
-            onError: (error) {
-              setState(() {
-                errorMessage = error.toString();
-              });
-              shared_logger.e(error.toString());
-            },
-            onPageError: (page, error) {
-              setState(() {
-                errorMessage = '$page: ${error.toString()}';
-              });
-              shared_logger.e('$page: ${error.toString()}');
-            },
-            onViewCreated: (PDFViewController pdfViewController) {
-              _controller.complete(pdfViewController);
-            },
-            onPageChanged: (int? page, int? total) {
-              shared_logger.d('page change: $page/$total');
-              setState(() {
-                currentPage = page;
-              });
-            },
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        cursorColor:
+                            Theme.of(context).textSelectionTheme.cursorColor,
+                        onEditingComplete: () {
+                          setState(() {
+                            try {
+                              currentPage = int.parse(searchedValue);
+                              _controller.future
+                                  .then((v) => v.setPage(currentPage ?? 1));
+                            } catch (e) {}
+                          });
+                        },
+                        onChanged: (value) {
+                          searchedValue = value;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            child: const Icon(Icons.search),
+                          ),
+                          labelText: 'Goto page',
+                          border: const OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(14.0)),
+                          ),
+                          labelStyle: const TextStyle(
+                            color: Color(0xFF6750A4),
+                          ),
+                          // enabledBorder: const OutlineInputBorder(
+                          //   borderSide:
+                          //       BorderSide(color: Color.fromARGB(149, 102, 80, 164)),
+                          // ),
+                          // focusedBorder: const OutlineInputBorder(
+                          //   borderSide: BorderSide(color: Color(0xFF6750A4)),
+                          // ),
+                          // errorBorder: const OutlineInputBorder(
+                          //   borderSide: BorderSide(color: Colors.red),
+                          // ),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                try {
+                                  currentPage = int.parse(searchedValue);
+                                  _controller.future
+                                      .then((v) => v.setPage(currentPage ?? 1));
+                                } catch (e) {}
+                              });
+                            },
+                            child: const Icon(
+                              Icons.arrow_forward,
+                              color: Color(0xFF6750A4),
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: PDFView(
+                  pdfData: pdfData,
+                  enableSwipe: true,
+                  swipeHorizontal: true,
+                  autoSpacing: false,
+                  pageFling: true,
+                  pageSnap: true,
+                  defaultPage: currentPage!,
+                  fitPolicy: FitPolicy.BOTH,
+                  onRender: (pages) {
+                    setState(() {
+                      pages = pages;
+                      isReady = true;
+                    });
+                  },
+                  onError: (error) {
+                    setState(() {
+                      errorMessage = error.toString();
+                    });
+                    shared_logger.e(error.toString());
+                  },
+                  onPageError: (page, error) {
+                    setState(() {
+                      errorMessage = '$page: ${error.toString()}';
+                    });
+                    shared_logger.e('$page: ${error.toString()}');
+                  },
+                  onViewCreated: (PDFViewController pdfViewController) {
+                    _controller.complete(pdfViewController);
+                  },
+                  onPageChanged: (int? page, int? total) {
+                    shared_logger.d('page change: $page/$total');
+                    setState(() {
+                      currentPage = page;
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

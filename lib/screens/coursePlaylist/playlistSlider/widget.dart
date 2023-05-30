@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cca_vijayapura/screens/coursePlaylist/widget.dart';
+import 'package:cca_vijayapura/screens/playlistVideos/videosSlider/widget.dart';
+import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -59,9 +63,9 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
             children: [
               Row(
                 children: [
-                  const Text(
-                    "PC/PCI",
-                    style: TextStyle(
+                  Text(
+                    widget.playlist.title,
+                    style: const TextStyle(
                       fontSize: 24.0,
                       color: Color(0xFF6750A3),
                       fontWeight: FontWeight.w800,
@@ -169,47 +173,77 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
             // enlargeCenterPage: true,
             onPageChanged: (i, _) => setState(() => currentSlide = i),
           ),
-          items: widget.playlist.videos.asMap().entries.map((item) {
+          items: widget.playlist.videos
+              .sublist(0, min(widget.playlist.videos.length, 4))
+              .asMap()
+              .entries
+              .map((item) {
             final i = item.key;
             final video = item.value;
             return Builder(
               builder: (BuildContext context) {
-                return Container(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: i == 0 ? 0 : 15),
-                          width: MediaQuery.of(context).size.width,
-                          // padding: const EdgeInsets.symmetric(
-                          //     horizontal: 15.0, vertical: 10),
-                          // decoration: BoxDecoration(
-                          //   color: const Color(0xFF6750A3),
-                          //   borderRadius: BorderRadius.circular(18.0),
-                          // ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.network(
-                              "$base_url${video.linkToVideoPreviewImage}",
-                              fit: BoxFit.fill,
+                return GestureDetector(
+                  onTap: () {
+                    if (video.linkToVideoStream == "") {
+                      ToastMessage.warning("Video link not available");
+                      return;
+                    }
+                    if (widget.paid) {
+                      Navigator.pushNamed(
+                        context,
+                        '/watch_video',
+                        arguments: VideoLists(
+                          id: video.id,
+                          title: video.title,
+                          description: "",
+                          createdBy: "",
+                          linkToVideoPreviewImage:
+                              video.linkToVideoPreviewImage,
+                          linkToVideoStream: video.linkToVideoStream,
+                          paid: widget.paid,
+                        ),
+                      );
+                    } else {
+                      ToastMessage.warning("Playlist is not purchased");
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: i == 0 ? 0 : 15),
+                            width: MediaQuery.of(context).size.width,
+                            // padding: const EdgeInsets.symmetric(
+                            //     horizontal: 15.0, vertical: 10),
+                            // decoration: BoxDecoration(
+                            //   color: const Color(0xFF6750A3),
+                            //   borderRadius: BorderRadius.circular(18.0),
+                            // ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                "$base_url${video.linkToVideoPreviewImage}",
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text(
-                          video.title,
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                            fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            video.title,
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },

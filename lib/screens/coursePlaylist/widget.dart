@@ -12,11 +12,13 @@ class PlaylistVideo {
   final String id;
   final String title;
   final String linkToVideoPreviewImage;
+  final String linkToVideoStream;
 
   PlaylistVideo({
     required this.id,
     required this.title,
     required this.linkToVideoPreviewImage,
+    required this.linkToVideoStream,
   });
 }
 
@@ -69,6 +71,7 @@ class _CoursePlaylistState extends State<CoursePlaylist> {
                 id: video["video_id"],
                 title: video["title"],
                 linkToVideoPreviewImage: video["link_to_video_preview_image"],
+                linkToVideoStream: video["link_to_video_stream"] ?? "",
               );
             }).toList(),
           );

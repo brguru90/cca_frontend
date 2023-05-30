@@ -17,25 +17,6 @@ class _WatchVideoState extends State<WatchVideo> {
     setState(() {
       videoData = video;
     });
-    // exeFetch(uri: "/forward/test");
-    // exeFetch(
-    //   uri: "/api/user/get_stream_key/",
-    //   method: "post",
-    //   body: jsonEncode({
-    //     "video_id": video.id,
-    //     "app_id": const String.fromEnvironment("APP_ID"),
-    //   }),
-    // ).then((body) {
-    //   final data = jsonDecode(body["body"])["data"];
-    //   shared_logger.d(data);
-    //   shared_logger.d(DecryptAES(const String.fromEnvironment("APP_SECRET"),
-    //       data["block_size"], data["key"]));
-    //   // setState(() {
-    //   //   streamLink
-    //   // });
-    // }).catchError((e, s) {
-    //   shared_logger.e(e);
-    // });
   }
 
   @override

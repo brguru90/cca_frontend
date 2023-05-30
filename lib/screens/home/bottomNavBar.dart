@@ -46,11 +46,14 @@ class HomeBottomNavBar extends StatelessWidget {
                         Image.asset("assets/icons/home.png", fit: BoxFit.cover),
                   ),
                 ),
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Image.asset("assets/icons/library.png",
-                      fit: BoxFit.cover),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/study_materials'),
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image.asset("assets/icons/library.png",
+                        fit: BoxFit.cover),
+                  ),
                 ),
                 SizedBox(
                   width: 50,

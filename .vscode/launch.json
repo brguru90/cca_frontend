@@ -20,7 +20,25 @@
       "type": "dart",
       "flutterMode": "debug",
       "preLaunchTask": "connect_mobile",
-      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env-prod.json"],
+      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env-prod2.json"],
+    },
+    {
+      "name": "cca (profile using remote server)",
+      "cwd": "",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "preLaunchTask": "connect_mobile",
+      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env-prod2.json"],
+    },
+    {
+      "name": "cca (release using remote server)",
+      "cwd": "",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "preLaunchTask": "connect_mobile",
+      "args": ["--dart-define", "RELEASE_MODE=false","--dart-define-from-file","env-prod2.json"],
     },
   ]
 }

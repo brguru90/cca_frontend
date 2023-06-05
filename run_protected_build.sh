@@ -3,7 +3,7 @@ export APP_SECRET=$(openssl rand -hex 16)
 
 echo -e "APP_ID=$APP_ID\nAPP_SECRET=$APP_SECRET"
 
-flutter build apk --release --dart-define=RELEASE_MODE=true --dart-define-from-file=env-prod.json --target-platform android-arm,android-arm64
+flutter build apk --release --dart-define-from-file=env-prod.json  --dart-define=APP_ID=$APP_ID  --dart-define=nAPP_SECRET=$APP_SECRET
 
 exit_status=$?
 
@@ -11,7 +11,7 @@ exit_status=$?
 if test $exit_status -eq 0
 then
     curl -L -X  'POST' \
-    'http://127.0.0.1:8000/api/register_build' \
+    'http://34.36.86.53/api/register_build' \
     -H 'accept: application/json' \
     -H 'Content-Type: multipart/form-data' \
     -F "app_id=$APP_ID" \

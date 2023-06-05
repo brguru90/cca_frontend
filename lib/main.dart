@@ -29,15 +29,13 @@ Future initialize() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   initFirebaseSetup();
-  if (kDebugMode) {
-    Future(() {
-      try {
-        startServer();
-      } catch (e) {
-        shared_logger.e(e);
-      }
-    });
-  }
+  Future(() {
+    try {
+      startServer();
+    } catch (e) {
+      shared_logger.e(e);
+    }
+  });
   return Future<Map>.value({});
 }
 

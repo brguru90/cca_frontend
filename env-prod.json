@@ -1,5 +1,5 @@
 {
-    "APP_ENV":"development",
+    "APP_ENV":"production",
     "SERVER_HOST":"34.36.86.53",
     "SERVER_PROTOCOL":"http",
     "SERVER_PORT":"80",

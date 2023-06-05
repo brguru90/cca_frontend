@@ -3,7 +3,7 @@ export APP_SECRET=$(openssl rand -hex 16)
 
 echo -e "APP_ID=$APP_ID\nAPP_SECRET=$APP_SECRET"
 
-flutter build apk --release --dart-define-from-file=env-prod.json  --dart-define=APP_ID=$APP_ID  --dart-define=nAPP_SECRET=$APP_SECRET
+flutter build apk --release --dart-define-from-file=env-prod.json  --dart-define=APP_ID=$APP_ID  --dart-define=APP_SECRET=$APP_SECRET
 
 exit_status=$?
 

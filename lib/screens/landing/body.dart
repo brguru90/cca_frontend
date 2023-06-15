@@ -84,7 +84,8 @@ class _LandingBodyState extends State<LandingBody> {
       setState(() {
         loading = false;
       });
-      Navigator.pushNamed(context, "/home");
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/home", (Route<dynamic> route) => false);
     }).catchError((e) {
       setState(() {
         loading = false;

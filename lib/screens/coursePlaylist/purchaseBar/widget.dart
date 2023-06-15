@@ -32,8 +32,9 @@ class _PlaylistPurchaseSummaryViewState
     * 2. Error Description
     * 3. Metadata
     * */
-    showAlertDialog(context, "Payment Failed",
-        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+    ToastMessage.error("Payment Failed/cancelled");
+    // showAlertDialog(context, "Payment Failed",
+    //     "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
   }
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
@@ -49,8 +50,8 @@ class _PlaylistPurchaseSummaryViewState
   }
 
   void handleExternalWalletSelected(ExternalWalletResponse response) {
-    showAlertDialog(
-        context, "External Wallet Selected", "${response.walletName}");
+    // showAlertDialog(
+    //     context, "External Wallet Selected", "${response.walletName}");
   }
 
   void showAlertDialog(BuildContext context, String title, String message) {

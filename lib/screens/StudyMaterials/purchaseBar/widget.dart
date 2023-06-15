@@ -32,8 +32,10 @@ class _StudyMaterialPurchaseSummaryViewState
     * 2. Error Description
     * 3. Metadata
     * */
-    showAlertDialog(context, "Payment Failed",
-        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+    // showAlertDialog(context, "Payment Failed", "");
+    ToastMessage.error("Payment Failed/cancelled");
+    // showAlertDialog(context, "Payment Failed",
+    //     "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
   }
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {

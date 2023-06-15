@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class NestedWillPopScope extends StatefulWidget {
+  final dynamic data;
   const NestedWillPopScope({
     Key? key,
     required this.child,
     required this.onWillPop,
+    this.data,
   }) : super(key: key);
 
   final Widget child;
-  final WillPopCallback onWillPop;
+  final Future<bool> Function(dynamic data) onWillPop;
 
   @override
   _NestedWillPopScopeState createState() => _NestedWillPopScopeState();
@@ -34,7 +36,7 @@ class _NestedWillPopScopeState extends State<NestedWillPopScope> {
       willPop = await _descendant!.onWillPop();
     }
     if (willPop == null || willPop) {
-      willPop = await widget.onWillPop();
+      willPop = await widget.onWillPop(widget.data);
     }
     return willPop;
   }

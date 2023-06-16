@@ -373,37 +373,35 @@ class _SignUpMobileState extends State<SignUpMobile> {
                               ),
                             );
                           }
-                          return Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  signUp = true;
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    "Don't have account yet?",
-                                    style: TextStyle(
-                                      color: Color(0xFFFF0099),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    textAlign: TextAlign.center,
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                signUp = true;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text(
+                                  "Don't have account yet?",
+                                  style: TextStyle(
+                                    color: Color(0xFFFF0099),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "Sign Up",
-                                    style: TextStyle(
-                                      color: Color(0xFF6750A3),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    textAlign: TextAlign.center,
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  "Sign Up",
+                                  style: TextStyle(
+                                    color: Color(0xFF6750A3),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                ],
-                              ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           );
                         })(),

@@ -1,3 +1,4 @@
+import 'package:cca_vijayapura/sharedState/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -24,9 +25,9 @@ class HomeHeader extends StatelessWidget {
           onTap: () => Navigator.pushNamed(context, "/account"),
           child: Row(
             children: [
-              const Text(
-                "Sathya",
-                style: TextStyle(
+              Text(
+                userData.state!.userName,
+                style: const TextStyle(
                   color: Color(0xFF6750A3),
                   fontSize: 18,
                   fontWeight: FontWeight.w500,

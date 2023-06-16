@@ -28,61 +28,59 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         //   _myWidgetState.
         // }
       },
-      child: Expanded(
-        child: YoYoPlayer(
-          aspectRatio: 16 / 9,
-          displayFullScreenAfterInit: widget.fullscreen,
-          url: widget.videoUrl,
-          videoStyle: const VideoStyle(
-            qualityStyle: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-            forwardAndBackwardBtSize: 30.0,
-            playButtonIconSize: 40.0,
-            playIcon: Icon(
-              Icons.play_arrow,
-              size: 40.0,
-              color: Colors.white,
-            ),
-            pauseIcon: Icon(
-              Icons.pause,
-              size: 40.0,
-              color: Colors.white,
-            ),
-            videoQualityPadding: EdgeInsets.all(5.0),
-            progressIndicatorPadding: EdgeInsets.only(top: 20),
+      child: YoYoPlayer(
+        aspectRatio: 16 / 9,
+        displayFullScreenAfterInit: widget.fullscreen,
+        url: widget.videoUrl,
+        videoStyle: const VideoStyle(
+          qualityStyle: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
           ),
-          videoLoadingStyle: const VideoLoadingStyle(
-            loading: Center(
-              child: Text("Loading video"),
-            ),
+          forwardAndBackwardBtSize: 30.0,
+          playButtonIconSize: 40.0,
+          playIcon: Icon(
+            Icons.play_arrow,
+            size: 40.0,
+            color: Colors.white,
           ),
-          allowCacheFile: true,
-          onCacheFileCompleted: (files) {
-            print('Cached file length ::: ${files?.length}');
-
-            if (files != null && files.isNotEmpty) {
-              for (var file in files) {
-                print('File path ::: ${file.path}');
-              }
-            }
-          },
-          onCacheFileFailed: (error) {
-            print('Cache file error ::: $error');
-          },
-          onFullScreen: (value) {
-            if (!value) {
-              Navigator.pop(context);
-            }
-            // setState(() {
-            //   if (fullscreen != value) {
-            //     fullscreen = value;
-            //   }
-            // });
-          },
+          pauseIcon: Icon(
+            Icons.pause,
+            size: 40.0,
+            color: Colors.white,
+          ),
+          videoQualityPadding: EdgeInsets.all(5.0),
+          progressIndicatorPadding: EdgeInsets.only(top: 20),
         ),
+        videoLoadingStyle: const VideoLoadingStyle(
+          loading: Center(
+            child: Text("Loading video"),
+          ),
+        ),
+        allowCacheFile: false,
+        onCacheFileCompleted: (files) {
+          print('Cached file length ::: ${files?.length}');
+
+          if (files != null && files.isNotEmpty) {
+            for (var file in files) {
+              print('File path ::: ${file.path}');
+            }
+          }
+        },
+        onCacheFileFailed: (error) {
+          print('Cache file error ::: $error');
+        },
+        onFullScreen: (value) {
+          if (!value) {
+            Navigator.pop(context);
+          }
+          // setState(() {
+          //   if (fullscreen != value) {
+          //     fullscreen = value;
+          //   }
+          // });
+        },
       ),
     );
   }

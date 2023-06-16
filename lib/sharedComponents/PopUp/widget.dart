@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:cca_vijayapura/sharedComponents/NestedWillPopScope/widget.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +36,12 @@ class CustomPopup {
   Color? overlayBackgroundColor;
   OverlayEntry? overlayEntry;
   OverlayState? overlayState;
+  bool bgBlur;
 
-  CustomPopup({required this.provideOverlayWidget, overlayBackgroundColor}) {
+  CustomPopup(
+      {required this.provideOverlayWidget,
+      overlayBackgroundColor,
+      this.bgBlur = false}) {
     this.overlayBackgroundColor =
         overlayBackgroundColor ?? Colors.white.withOpacity(0.2);
   }
@@ -44,7 +49,7 @@ class CustomPopup {
   Widget NestWithCustomPopup({required Widget child}) {
     return NestedWillPopScope(
       child: child,
-      onWillPop: () async {
+      onWillPop: (data) async {
         if (overlayEntry == null) {
           return Future.value(true);
         }
@@ -103,6 +108,7 @@ class CustomPopup {
         double maxWidth = width;
         EdgeInsets statusBarPadding = MediaQuery.of(overlayContext).viewPadding;
         double systemScreenGap = statusBarPadding.top + statusBarPadding.bottom;
+        // kToolbarHeight
 
         if ((width / 2) < (customPopupOptions.dx)) {
           fixedPos.right = width - (customPopupOptions.dx);
@@ -131,7 +137,18 @@ class CustomPopup {
           child: Stack(
             children: [
               Positioned(
+                left: fixedPos.left,
+                top: fixedPos.top,
+                bottom: fixedPos.bottom,
+                right: fixedPos.right,
                 child: Container(
+                  // color: Colors.blue,
+                  constraints: BoxConstraints(
+                    maxHeight: maxHeight,
+                    maxWidth: maxWidth,
+                    minWidth: 0,
+                    minHeight: 0,
+                  ),
                   // color: Colors.blue,
                   child: provideOverlayWidget2(
                     alignBottom: fixedPos.bottom != null,
@@ -139,22 +156,22 @@ class CustomPopup {
                     alignRight: fixedPos.right != null,
                     alignTop: fixedPos.top != null,
                   ),
-                  constraints: BoxConstraints(
-                    maxHeight: maxHeight,
-                    maxWidth: maxWidth,
-                    minWidth: 0,
-                    minHeight: 0,
-                  ),
                 ),
-                left: fixedPos.left,
-                top: fixedPos.top,
-                bottom: fixedPos.bottom,
-                right: fixedPos.right,
               ),
             ],
           ),
         );
       }
+    }
+
+    Widget withBlur({required Widget child}) {
+      if (bgBlur) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+          child: child,
+        );
+      }
+      return child;
     }
 
     overlayState = Overlay.of(parentContext);
@@ -172,10 +189,12 @@ class CustomPopup {
             return Stack(
               children: [
                 Positioned.fill(
-                  child: GestureDetector(
-                    onTap: hide,
-                    child: Container(
-                      color: Colors.transparent,
+                  child: withBlur(
+                    child: GestureDetector(
+                      onTap: hide,
+                      child: Container(
+                        color: Colors.transparent,
+                      ),
                     ),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:cca_vijayapura/sharedState/types/add_cart.dart';
+import 'package:cca_vijayapura/sharedState/types/stacked_overlay.dart';
 import 'package:cca_vijayapura/sharedState/types/user_type.dart';
 import 'package:flutter/widgets.dart';
 
@@ -24,4 +25,12 @@ SharedState<CartData?> cartData = SharedState<CartData?>(
   initialState: {},
   parseToType: (state) => CartData.mapToClass(state),
   parseToTMap: (state) => state?.toMap() ?? {},
+);
+
+SharedState<StackedOverlay> overlayStack = SharedState<StackedOverlay>(
+  key: "overlay_stack",
+  persist: false,
+  initialState: {"overlays": <StackedOverlayType>[]},
+  parseToType: (state) => StackedOverlay.mapToClass(state),
+  parseToTMap: (state) => state.toMap(),
 );

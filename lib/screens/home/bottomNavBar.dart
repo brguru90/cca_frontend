@@ -1,5 +1,6 @@
 import 'package:cca_vijayapura/sharedState/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   const HomeBottomNavBar({Key? key}) : super(key: key);
@@ -38,7 +39,8 @@ class HomeBottomNavBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(context, '/home'),
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context, '/home', (Route<dynamic> route) => false),
                   child: SizedBox(
                     width: 50,
                     height: 50,
@@ -47,7 +49,8 @@ class HomeBottomNavBar extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/study_materials'),
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(context,
+                      '/study_materials', (Route<dynamic> route) => false),
                   child: SizedBox(
                     width: 50,
                     height: 50,
@@ -55,12 +58,21 @@ class HomeBottomNavBar extends StatelessWidget {
                         fit: BoxFit.cover),
                   ),
                 ),
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child:
-                      Image.asset("assets/icons/ebook.png", fit: BoxFit.cover),
-                ),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
+                      context, "/account", (Route<dynamic> route) => false),
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: SvgPicture.asset(
+                      "assets/icons/userAcc.svg",
+                      colorFilter: const ColorFilter.mode(
+                        Color.fromARGB(255, 241, 106, 82),
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ],

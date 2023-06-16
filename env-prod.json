@@ -1,8 +1,6 @@
 {
-    "APP_ENV":"development",
-    "SERVER_HOST":"localhost",
+    "APP_ENV":"production",
+    "SERVER_HOST":"34.36.86.53",
     "SERVER_PROTOCOL":"http",
-    "SERVER_PORT":"8000",
-    "APP_ID":"=fe0d79e4bbbc4ec3fd8522dfa292573f",
-    "APP_SECRET":"9f60cac9330519aa234e30c49a44beb5"
+    "SERVER_PORT":"80"
 }

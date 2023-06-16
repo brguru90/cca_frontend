@@ -15,6 +15,7 @@ class OrganizationBanner extends StatelessWidget {
             constraints: const BoxConstraints(minWidth: 150, minHeight: 150),
             child: SvgPicture.asset(
               "assets/icons/logo.svg",
+              width: 100,
               // colorFilter: const ColorFilter.mode(
               //   Color(0xFF6750A3),
               //   BlendMode.srcIn,

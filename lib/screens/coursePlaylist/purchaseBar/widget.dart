@@ -25,6 +25,8 @@ class _PlaylistPurchaseSummaryViewState
     extends State<PlaylistPurchaseSummaryView> {
   Map orderData = {};
 
+  bool purchaseInProgress = false;
+
   void handlePaymentErrorResponse(PaymentFailureResponse response) {
     /*
     * PaymentFailureResponse contains three values:
@@ -119,8 +121,14 @@ class _PlaylistPurchaseSummaryViewState
         ToastMessage.error("payment failed");
       }
       widget.reloadSubscriptionStatus();
+      setState(() {
+        purchaseInProgress = false;
+      });
     }).catchError((e, s) {
       shared_logger.e(e);
+      setState(() {
+        purchaseInProgress = false;
+      });
     });
   }
 
@@ -142,6 +150,13 @@ class _PlaylistPurchaseSummaryViewState
   }
 
   void enrollToPlaylist() {
+    if (purchaseInProgress) {
+      ToastMessage.info("Purchase in progress");
+      return;
+    }
+    setState(() {
+      purchaseInProgress = true;
+    });
     createOrder();
   }
 

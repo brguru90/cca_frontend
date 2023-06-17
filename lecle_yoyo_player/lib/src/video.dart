@@ -262,6 +262,8 @@ class _YoYoPlayerState extends State<YoYoPlayer>
   /// and if not it will display with the disable color.
   bool isAtLivePosition = true;
 
+  bool firstTimeVideoPlayed = false;
+
   @override
   void initState() {
     super.initState();
@@ -935,6 +937,9 @@ class _YoYoPlayerState extends State<YoYoPlayer>
           videoPlayerOptions: widget.videoPlayerOptions,
         )..initialize().then((value) {
             seekToLastPlayingPosition();
+            setState(() {
+              firstTimeVideoPlayed = true;
+            });
             if (widget.onLoad != null) {
               widget.onLoad!(true);
             }
@@ -948,6 +953,9 @@ class _YoYoPlayerState extends State<YoYoPlayer>
           videoPlayerOptions: widget.videoPlayerOptions,
         )..initialize().then((value) {
             seekToLastPlayingPosition();
+            setState(() {
+              firstTimeVideoPlayed = true;
+            });
             if (widget.onLoad != null) {
               widget.onLoad!(true);
             }
@@ -965,7 +973,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             if (widget.onLoad != null) {
               widget.onLoad!(true);
             }
-            if (widget.defaultQualityToBeHeigh) {
+            if (!firstTimeVideoPlayed && widget.defaultQualityToBeHeigh) {
               final hq = yoyo.where((element) => element.isHightQuality).first;
               if (m3u8Quality != hq.dataQuality) {
                 setState(() {
@@ -974,8 +982,18 @@ class _YoYoPlayerState extends State<YoYoPlayer>
                 onSelectQuality(hq);
               }
             }
+            setState(() {
+              firstTimeVideoPlayed = true;
+            });
           }).catchError((e) {
-            setState(() => hasInitError = true);
+            if (!hasInitError) {
+              videoControlSetup(widget.url, lastPlayedPos);
+            }
+            setState(() {
+              hasInitError = true;
+              m3u8Quality = "Auto";
+            });
+            widget.onLoad!(true);
           });
       }
     } else {

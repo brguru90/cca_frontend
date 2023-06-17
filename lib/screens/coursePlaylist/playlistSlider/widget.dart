@@ -185,7 +185,7 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                 return GestureDetector(
                   onTap: () {
                     if (video.linkToVideoStream == "") {
-                      ToastMessage.warning("Video link not available");
+                      ToastMessage.warning("Video link not available yet");
                       return;
                     }
                     if (widget.paid) {

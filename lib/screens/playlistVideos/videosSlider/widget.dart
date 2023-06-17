@@ -52,8 +52,8 @@ class _VideosSliderState extends State<VideosSlider> {
             title: video["title"],
             description: video["description"],
             createdBy: video["created_by_user"],
-            linkToVideoPreviewImage: video["link_to_video_preview_image"],
-            linkToVideoStream: video["link_to_video_stream"],
+            linkToVideoPreviewImage: video["link_to_video_preview_image"] ?? "",
+            linkToVideoStream: video["link_to_video_stream"] ?? "",
             paid: args["paid"],
           );
         }).toList();
@@ -86,17 +86,20 @@ class _VideosSliderState extends State<VideosSlider> {
           return Padding(
             padding: EdgeInsets.only(top: item.key == 0 ? 0 : 20),
             child: GestureDetector(
-              onTap: () => {
-                if (video.paid)
-                  {
-                    Navigator.pushNamed(
-                      context,
-                      '/watch_video',
-                      arguments: video,
-                    )
-                  }
-                else
-                  {ToastMessage.warning("Playlist is not purchased")}
+              onTap: () {
+                if (!video.paid) {
+                  ToastMessage.warning("Playlist is not purchased");
+                  return;
+                }
+                if (video.linkToVideoStream.trim() == "") {
+                  ToastMessage.warning("Video link not available yet");
+                  return;
+                }
+                Navigator.pushNamed(
+                  context,
+                  '/watch_video',
+                  arguments: video,
+                );
               },
               child: SizedBox(
                 height: 110,
@@ -105,12 +108,16 @@ class _VideosSliderState extends State<VideosSlider> {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                          imagePreviewUrl,
-                          // "http://localhost:8000/cdn/image/wqefr_1684769989417.png",
-                          fit: BoxFit.cover,
+                      child: ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(minWidth: 110, minHeight: 110),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.network(
+                            imagePreviewUrl,
+                            // "http://localhost:8000/cdn/image/wqefr_1684769989417.png",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),

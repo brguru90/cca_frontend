@@ -75,6 +75,10 @@ class YoYoPlayer extends StatefulWidget {
   /// Video aspect ratio. Ex: [aspectRatio: 16 / 9 ]
   final double aspectRatio;
 
+  final bool defaultQualityToBeHeigh;
+
+  final Function(bool)? onLoad;
+
   /// Callback function for on fullscreen event.
   final void Function(bool fullScreenTurnedOn)? onFullScreen;
 
@@ -150,6 +154,8 @@ class YoYoPlayer extends StatefulWidget {
     Key? key,
     required this.url,
     this.aspectRatio = 16 / 9,
+    this.defaultQualityToBeHeigh = false,
+    this.onLoad,
     this.videoStyle = const VideoStyle(),
     this.videoLoadingStyle = const VideoLoadingStyle(),
     this.onFullScreen,
@@ -557,7 +563,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         print("urlEnd : mkv");
         widget.onPlayingVideo?.call("MKV");
 
-        videoControlSetup(url);
+        videoControlSetup(url, null);
 
         if (widget.allowCacheFile) {
           FileUtils.cacheFileToLocalStorage(
@@ -577,7 +583,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         print("urlEnd: $playType");
         widget.onPlayingVideo?.call("MP4");
 
-        videoControlSetup(url);
+        videoControlSetup(url, null);
 
         if (widget.allowCacheFile) {
           FileUtils.cacheFileToLocalStorage(
@@ -597,7 +603,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         print("urlEnd: $playType");
         widget.onPlayingVideo?.call("WEBM");
 
-        videoControlSetup(url);
+        videoControlSetup(url, null);
 
         if (widget.allowCacheFile) {
           FileUtils.cacheFileToLocalStorage(
@@ -617,11 +623,11 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         widget.onPlayingVideo?.call("M3U8");
 
         print("urlEnd: M3U8");
-        videoControlSetup(url);
+        videoControlSetup(url, null);
         getM3U8(url);
       } else {
         print("urlEnd: null");
-        videoControlSetup(url);
+        videoControlSetup(url, null);
         getM3U8(url);
       }
       print("--- Current Video Status ---\noffline : $isOffline");
@@ -632,7 +638,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             "--- Current Video Status ---\noffline : $isOffline \n --- :3 Done url check ---");
       });
 
-      videoControlSetup(url);
+      videoControlSetup(url, null);
     }
   }
 
@@ -682,6 +688,24 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             regExpAudio.allMatches(m3u8Content ?? '').toList();
         print(
             "--- HLS Data ----\n$m3u8Content \nTotal length: ${yoyo.length} \nFinish!!!");
+
+        Map<int, String> mappedQuality = {};
+        matches.forEach((RegExpMatch regExpMatch) async {
+          String quality = (regExpMatch.group(1)).toString();
+          int qualityWidth =
+              int.parse((regExpMatch.group(1)).toString().split("x")[0]);
+          mappedQuality[qualityWidth] = quality;
+        });
+
+        Map<String, int> orderedQuality = {};
+        int qualityWeight = 1;
+        String highestQuality = "";
+        mappedQuality.entries.toList()
+          ..sort(((a, b) => a.key.compareTo(b.key)))
+          ..forEach((e) {
+            orderedQuality[e.value] = qualityWeight++;
+            highestQuality = e.value;
+          });
 
         matches.forEach(
           (RegExpMatch regExpMatch) async {
@@ -757,7 +781,12 @@ class _YoYoPlayerState extends State<YoYoPlayer>
               }
             }
 
-            yoyo.add(M3U8Data(dataQuality: quality, dataURL: url));
+            yoyo.add(M3U8Data(
+              dataQuality: quality,
+              dataURL: url,
+              qualityWight: orderedQuality[quality],
+              isHightQuality: quality == highestQuality,
+            ));
           },
         );
         M3U8s m3u8s = M3U8s(m3u8s: yoyo);
@@ -772,11 +801,13 @@ class _YoYoPlayerState extends State<YoYoPlayer>
   }
 
 // Init video controller
-  void videoControlSetup(String? url) async {
+  void videoControlSetup(String? url, Duration? lastPlayedPos) async {
     videoInit(url);
 
+    if (lastPlayedPos != null) {
+      controller.seekTo(lastPlayedPos);
+    }
     controller.addListener(listener);
-
     if (widget.autoPlayVideoAfterInit) {
       controller.play();
     }
@@ -886,6 +917,11 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
   void videoInit(String? url) {
     if (isOffline == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (widget.onLoad != null) {
+          widget.onLoad!(false);
+        }
+      });
       print(
           "--- Player status ---\nplay url : $url\noffline : $isOffline\n--- start playing –––");
 
@@ -897,7 +933,12 @@ class _YoYoPlayerState extends State<YoYoPlayer>
           httpHeaders: widget.headers ?? const <String, String>{},
           closedCaptionFile: widget.closedCaptionFile,
           videoPlayerOptions: widget.videoPlayerOptions,
-        )..initialize().then((value) => seekToLastPlayingPosition);
+        )..initialize().then((value) {
+            seekToLastPlayingPosition();
+            if (widget.onLoad != null) {
+              widget.onLoad!(true);
+            }
+          });
       } else if (playType == "MKV") {
         controller = VideoPlayerController.network(
           url!,
@@ -905,7 +946,12 @@ class _YoYoPlayerState extends State<YoYoPlayer>
           httpHeaders: widget.headers ?? const <String, String>{},
           closedCaptionFile: widget.closedCaptionFile,
           videoPlayerOptions: widget.videoPlayerOptions,
-        )..initialize().then((value) => seekToLastPlayingPosition);
+        )..initialize().then((value) {
+            seekToLastPlayingPosition();
+            if (widget.onLoad != null) {
+              widget.onLoad!(true);
+            }
+          });
       } else if (playType == "HLS") {
         controller = VideoPlayerController.network(
           url!,
@@ -916,6 +962,13 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         )..initialize().then((_) {
             setState(() => hasInitError = false);
             seekToLastPlayingPosition();
+            if (widget.onLoad != null) {
+              widget.onLoad!(true);
+            }
+            if (widget.defaultQualityToBeHeigh) {
+              onSelectQuality(
+                  yoyo.where((element) => element.isHightQuality).first);
+            }
           }).catchError((e) {
             setState(() => hasInitError = true);
           });
@@ -961,7 +1014,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     }
 
     if (data.dataQuality == "Auto") {
-      videoControlSetup(data.dataURL);
+      videoControlSetup(data.dataURL, lastPlayedPos);
     } else {
       try {
         String text;
@@ -978,6 +1031,8 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             print('Play ${data.dataQuality} m3u8 video file failed');
           }
           // videoControlSetup(file);
+        } else {
+          videoControlSetup(data.dataURL, lastPlayedPos);
         }
       } catch (e) {
         print("Couldn't read file ${data.dataQuality}: $e");

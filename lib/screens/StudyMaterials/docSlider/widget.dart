@@ -90,11 +90,14 @@ class _DocSliderState extends State<DocSlider> {
                         else
                           {ToastMessage.info("Please purchase before view")}
                       },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                          imagePreviewUrl,
-                          fit: BoxFit.cover,
+                      child: AspectRatio(
+                        aspectRatio: 4 / 3,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.network(
+                            imagePreviewUrl,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),

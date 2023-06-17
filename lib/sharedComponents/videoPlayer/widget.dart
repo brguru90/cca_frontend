@@ -33,7 +33,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         children: [
           Positioned.fill(
             child: YoYoPlayer(
-              // defaultQualityToBeHeigh: true,
+              defaultQualityToBeHeigh: true,
               onLoad: (loaded) => {
                 setState(() {
                   isLoaded = loaded;

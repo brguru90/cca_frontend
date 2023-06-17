@@ -966,8 +966,13 @@ class _YoYoPlayerState extends State<YoYoPlayer>
               widget.onLoad!(true);
             }
             if (widget.defaultQualityToBeHeigh) {
-              onSelectQuality(
-                  yoyo.where((element) => element.isHightQuality).first);
+              final hq = yoyo.where((element) => element.isHightQuality).first;
+              if (m3u8Quality != hq.dataQuality) {
+                setState(() {
+                  m3u8Quality = hq.dataQuality ?? m3u8Quality;
+                });
+                onSelectQuality(hq);
+              }
             }
           }).catchError((e) {
             setState(() => hasInitError = true);

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cca_vijayapura/screens/landing/body.dart';
 import 'package:cca_vijayapura/screens/landing/header.dart';
 import 'package:cca_vijayapura/services/http_request.dart';
+import 'package:cca_vijayapura/sharedState/state.dart';
 import 'package:flutter/material.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -18,10 +21,12 @@ class _LandingScreenState extends State<LandingScreen> {
     });
     exeFetch(
       uri: "/api/login_status/",
-    )
-        .then((value) => Navigator.pushNamedAndRemoveUntil(
-            context, "/home", (Route<dynamic> route) => false))
-        .catchError((e) {
+    ).then((value) {
+      final respBody = jsonDecode(value["body"]);
+      userData.state = respBody?["data"];
+      Navigator.pushNamedAndRemoveUntil(
+          context, "/home", (Route<dynamic> route) => false);
+    }).catchError((e) {
       setState(() {
         isLoading = false;
       });

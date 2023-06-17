@@ -31,7 +31,7 @@ class _AccountScreenState extends State<AccountScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           color: Colors.white,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 10),
               const HomeHeader(),
@@ -79,57 +79,84 @@ class _AccountScreenState extends State<AccountScreen> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 40),
-                        const Text(
-                          "Developed by:",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 223, 16, 85),
-                            fontSize: 25,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Guruprasad BR",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 20, 67, 255),
-                                fontSize: 14,
-                              ),
-                            ),
-                            Text(
-                              "brguru90@gmail.com",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 20, 67, 255),
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "Sathyanarayana",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 20, 67, 255),
-                                fontSize: 14,
-                              ),
-                            ),
-                            Text(
-                              "sathyanitsme@gmail.com",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 20, 67, 255),
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        )
                       ]),
                 ),
               ),
+              const SizedBox(height: 40),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 243, 252, 255),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Developed by:",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 255, 28, 194),
+                        fontSize: 22,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Guruprasad BR",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 20, 67, 255),
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "brguru90@gmail.com",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 20, 67, 255),
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "Mobile: 9482399078",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 20, 67, 255),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          "Sathyanarayana",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 20, 67, 255),
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "sathyanitsme@gmail.com",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 20, 67, 255),
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          "Mobile: 8618059329",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 20, 67, 255),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

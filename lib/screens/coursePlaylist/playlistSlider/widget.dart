@@ -224,9 +224,17 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                             // ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
-                              child: Image.network(
-                                "$base_url${video.linkToVideoPreviewImage}",
-                                fit: BoxFit.fill,
+                              child: AspectRatio(
+                                aspectRatio: 4 / 3,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder: "assets/images/loading.png",
+                                    image:
+                                        "$base_url${video.linkToVideoPreviewImage}",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

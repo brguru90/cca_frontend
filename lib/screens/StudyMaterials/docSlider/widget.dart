@@ -94,8 +94,9 @@ class _DocSliderState extends State<DocSlider> {
                         aspectRatio: 4 / 3,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          child: Image.network(
-                            imagePreviewUrl,
+                          child: FadeInImage.assetNetwork(
+                            placeholder: "assets/images/loading.png",
+                            image: imagePreviewUrl,
                             fit: BoxFit.cover,
                           ),
                         ),

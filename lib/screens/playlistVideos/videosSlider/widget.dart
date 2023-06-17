@@ -108,15 +108,17 @@ class _VideosSliderState extends State<VideosSlider> {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(minWidth: 110, minHeight: 110),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image.network(
-                            imagePreviewUrl,
-                            // "http://localhost:8000/cdn/image/wqefr_1684769989417.png",
-                            fit: BoxFit.cover,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: FadeInImage.assetNetwork(
+                              placeholder: "assets/images/loading.png",
+                              image: imagePreviewUrl,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

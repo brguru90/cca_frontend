@@ -75,7 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "Email: nimmachanakya.Shree@gmail.com1",
+                                    "Email: nimmachanakya.shree@gmail.com",
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 39, 39, 39),
                                       fontSize: 18,

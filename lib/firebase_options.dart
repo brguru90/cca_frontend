@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCIzRDrjxj1HpCBaaTHJ5C7IAvUdh3trQw',
-    appId: '1:564585822015:web:c1767c7e5cd513df60858a',
-    messagingSenderId: '564585822015',
-    projectId: 'cca-vijayapura',
-    authDomain: 'cca-vijayapura.firebaseapp.com',
-    storageBucket: 'cca-vijayapura.appspot.com',
-    measurementId: 'G-CDME9DFQHY',
+    apiKey: 'AIzaSyCYQWb53PQBebnlxOQYOSEOjNNha_hHr-A',
+    appId: '1:201658062957:web:e53b62b93e9f71c5f04764',
+    messagingSenderId: '201658062957',
+    projectId: 'genial-aspect-388404',
+    authDomain: 'genial-aspect-388404.firebaseapp.com',
+    storageBucket: 'genial-aspect-388404.appspot.com',
+    measurementId: 'G-6QQTHMN9F0',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCZhzn6vXV0E8aquJBNoEWepPOVWijOzzY',
-    appId: '1:564585822015:android:e418a9fcaee725a660858a',
-    messagingSenderId: '564585822015',
-    projectId: 'cca-vijayapura',
-    storageBucket: 'cca-vijayapura.appspot.com',
+    apiKey: 'AIzaSyAsC_MBuJM8M1BZQhA0RZKcE2DztrK0-Ps',
+    appId: '1:201658062957:android:9507a89471994cd4f04764',
+    messagingSenderId: '201658062957',
+    projectId: 'genial-aspect-388404',
+    storageBucket: 'genial-aspect-388404.appspot.com',
   );
 }

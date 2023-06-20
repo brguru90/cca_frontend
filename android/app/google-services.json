@@ -1,93 +1,50 @@
 {
   "project_info": {
-    "project_number": "564585822015",
-    "project_id": "cca-vijayapura",
-    "storage_bucket": "cca-vijayapura.appspot.com"
+    "project_number": "201658062957",
+    "project_id": "genial-aspect-388404",
+    "storage_bucket": "genial-aspect-388404.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:564585822015:android:915a48bc1bf5fd9e60858a",
+        "mobilesdk_app_id": "1:201658062957:android:9507a89471994cd4f04764",
         "android_client_info": {
-          "package_name": "com.example.cca_vijayapura"
+          "package_name": "com.cca_vijayapura.academy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "564585822015-bvml4fi59a54305rq0nkgciink8hbcqu.apps.googleusercontent.com",
+          "client_id": "201658062957-9vrpvdhckksq7vnl9t5403efv1fsm86p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.cca_vijayapura",
-            "certificate_hash": "1db63fffee48c56cfc46c5b8ce57caccacbf1d6d"
-          }
-        },
-        {
-          "client_id": "564585822015-n73onnim8ifodnj77hb24cr07h8d3eig.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.cca_vijayapura",
+            "package_name": "com.cca_vijayapura.academy",
             "certificate_hash": "313c2eac0eaf79df2307f483b8db8578c0e9770e"
           }
         },
         {
-          "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
+          "client_id": "201658062957-md50u4qh98jsd2e4t9tuqqe94uijq84k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cca_vijayapura.academy",
+            "certificate_hash": "1f63c1367ee1845bc1344d428fc2bd0226122bda"
+          }
+        },
+        {
+          "client_id": "201658062957-v12sr9j3n6hbp6bcj0ejo6p30cequa4v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCZhzn6vXV0E8aquJBNoEWepPOVWijOzzY"
+          "current_key": "AIzaSyAsC_MBuJM8M1BZQhA0RZKcE2DztrK0-Ps"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
+              "client_id": "201658062957-ee4jsncdknlf6gafj010311uci1k9clc.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "564585822015-afl562tse4kgdh4nt8t6jgnlav4pq052.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.flutterCrudAuth"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:564585822015:android:e418a9fcaee725a660858a",
-        "android_client_info": {
-          "package_name": "com.example.flutter_crud_auth"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCZhzn6vXV0E8aquJBNoEWepPOVWijOzzY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "564585822015-bkfojoam5ju3ng1tv7vk5t64pn746bmc.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "564585822015-afl562tse4kgdh4nt8t6jgnlav4pq052.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.flutterCrudAuth"
-              }
             }
           ]
         }

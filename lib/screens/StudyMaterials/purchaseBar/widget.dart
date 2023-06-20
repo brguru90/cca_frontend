@@ -34,6 +34,9 @@ class _StudyMaterialPurchaseSummaryViewState
     * 3. Metadata
     * */
     // showAlertDialog(context, "Payment Failed", "");
+    setState(() {
+      purchaseInProgress = false;
+    });
     ToastMessage.error("Payment Failed/cancelled");
     // showAlertDialog(context, "Payment Failed",
     //     "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");

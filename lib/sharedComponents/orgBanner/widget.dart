@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class OrganizationBanner extends StatelessWidget {
-  const OrganizationBanner({Key? key}) : super(key: key);
+  final double? minWidth, minHeight;
+  const OrganizationBanner({
+    Key? key,
+    this.minWidth,
+    this.minHeight,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +17,8 @@ class OrganizationBanner extends StatelessWidget {
       children: [
         Flexible(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 150, minHeight: 150),
+            constraints: BoxConstraints(
+                minWidth: minWidth ?? 150, minHeight: minHeight ?? 150),
             child: SvgPicture.asset(
               "assets/icons/logo.svg",
               width: 100,

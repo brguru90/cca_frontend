@@ -3,6 +3,7 @@ import 'package:cca_vijayapura/screens/home/header.dart';
 import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:cca_vijayapura/services/secure_store.dart';
 import 'package:cca_vijayapura/services/temp_store.dart';
+import 'package:cca_vijayapura/sharedComponents/orgBanner/widget.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -41,42 +42,89 @@ class _AccountScreenState extends State<AccountScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 40),
-                        ElevatedButton(
-                          onPressed: () => logout(context),
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 15,
-                              ),
-                            ),
-                            backgroundColor:
-                                const MaterialStatePropertyAll<Color>(
-                                    Color(0xFF6750A3)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                                side: const BorderSide(
-                                    color: Color.fromARGB(0, 255, 255, 255)),
-                              ),
-                            ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 243, 252, 255),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Text(
-                                "Logout",
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "About Us",
                                 style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                textAlign: TextAlign.center,
+                                    color: Color(0xFF6750A3),
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 10),
+                              const OrganizationBanner(
+                                minWidth: 80,
+                                minHeight: 0,
+                              ),
+                              const SizedBox(height: 20),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    "Malghan building Meenakshi chowk Vijayapura, 586101",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 39, 39, 39),
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Email: nimmachanakya.Shree@gmail.com1",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 39, 39, 39),
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        Align(
+                          alignment: Alignment.center,
+                          child: ElevatedButton(
+                            onPressed: () => logout(context),
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 15,
+                                ),
+                              ),
+                              backgroundColor:
+                                  const MaterialStatePropertyAll<Color>(
+                                      Color(0xFF6750A3)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  side: const BorderSide(
+                                      color: Color.fromARGB(0, 255, 255, 255)),
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Text(
+                                  "Logout",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ]),
@@ -96,7 +144,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       "Developed by:",
                       style: TextStyle(
                         color: Color.fromARGB(255, 255, 28, 194),
-                        fontSize: 22,
+                        fontSize: 18,
                       ),
                     ),
                     const SizedBox(height: 10),

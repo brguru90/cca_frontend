@@ -34,6 +34,9 @@ class _PlaylistPurchaseSummaryViewState
     * 2. Error Description
     * 3. Metadata
     * */
+    setState(() {
+      purchaseInProgress = false;
+    });
     ToastMessage.error("Payment Failed/cancelled");
     // showAlertDialog(context, "Payment Failed",
     //     "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");

@@ -122,5 +122,5 @@ flutter:
 
 
 flutter_icons:
-  image_path: "assets/icons/logo.svg" 
+  image_path: "assets/images/logo.png" 
   android: true

@@ -14,7 +14,7 @@ class CustomVideoPlayer extends StatefulWidget {
 
 class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   bool fullscreen = false;
-  bool isLoaded = false;
+  bool isLoaded = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -29,96 +29,71 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         //   _myWidgetState.
         // }
       },
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: YoYoPlayer(
-              defaultQualityToBeHeigh: true,
-              onLoad: (loaded) => {
-                setState(() {
-                  isLoaded = loaded;
-                })
-              },
-              aspectRatio: 16 / 9,
-              displayFullScreenAfterInit: widget.fullscreen,
-              url: widget.videoUrl,
-              videoStyle: const VideoStyle(
-                qualityStyle: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-                forwardAndBackwardBtSize: 30.0,
-                playButtonIconSize: 40.0,
-                playIcon: Icon(
-                  Icons.play_arrow,
-                  size: 40.0,
-                  color: Colors.white,
-                ),
-                pauseIcon: Icon(
-                  Icons.pause,
-                  size: 40.0,
-                  color: Colors.white,
-                ),
-                videoQualityPadding: EdgeInsets.all(5.0),
-                progressIndicatorPadding: EdgeInsets.only(top: 20),
+      child: YoYoPlayer(
+        defaultQualityToBeHeigh: true,
+        onLoad: (loaded) => {
+          setState(() {
+            isLoaded = loaded;
+          })
+        },
+        aspectRatio: 16 / 9,
+        displayFullScreenAfterInit: widget.fullscreen,
+        url: widget.videoUrl,
+        videoStyle: const VideoStyle(
+          qualityStyle: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+          forwardAndBackwardBtSize: 30.0,
+          playButtonIconSize: 40.0,
+          playIcon: Icon(
+            Icons.play_arrow,
+            size: 40.0,
+            color: Colors.white,
+          ),
+          pauseIcon: Icon(
+            Icons.pause,
+            size: 40.0,
+            color: Colors.white,
+          ),
+          videoQualityPadding: EdgeInsets.all(5.0),
+          progressIndicatorPadding: EdgeInsets.only(top: 20),
+        ),
+        videoLoadingStyle: const VideoLoadingStyle(
+          loading: Center(
+            child: Text(
+              "Loading",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
               ),
-              videoLoadingStyle: const VideoLoadingStyle(
-                loading: Center(
-                  child: Text("Loading video"),
-                ),
-              ),
-              allowCacheFile: false,
-              onCacheFileCompleted: (files) {
-                print('Cached file length ::: ${files?.length}');
-
-                if (files != null && files.isNotEmpty) {
-                  for (var file in files) {
-                    print('File path ::: ${file.path}');
-                  }
-                }
-              },
-              onCacheFileFailed: (error) {
-                print('Cache file error ::: $error');
-              },
-              onFullScreen: (value) {
-                if (!value) {
-                  Navigator.pop(context);
-                }
-                // setState(() {
-                //   if (fullscreen != value) {
-                //     fullscreen = value;
-                //   }
-                // });
-              },
             ),
           ),
-          (() {
-            if (!isLoaded) {
-              return Positioned.fill(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      "Loading",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                      ),
-                    )
-                  ],
-                ),
-              );
+        ),
+        allowCacheFile: false,
+        onCacheFileCompleted: (files) {
+          print('Cached file length ::: ${files?.length}');
+
+          if (files != null && files.isNotEmpty) {
+            for (var file in files) {
+              print('File path ::: ${file.path}');
             }
-            return const Positioned(
-              left: 0,
-              top: 0,
-              width: 0,
-              height: 0,
-              child: SizedBox(),
-            );
-          })()
-        ],
+          }
+        },
+        onCacheFileFailed: (error) {
+          print('Cache file error ::: $error');
+        },
+        onFullScreen: (value) {
+          if (!value) {
+            Navigator.pop(context);
+          }
+          // setState(() {
+          //   if (fullscreen != value) {
+          //     fullscreen = value;
+          //   }
+          // });
+        },
       ),
     );
   }

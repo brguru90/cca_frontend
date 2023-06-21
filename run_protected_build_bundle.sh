@@ -11,7 +11,7 @@ exit_status=$?
 if test $exit_status -eq 0
 then
     curl -L -X  'POST' \
-    'http://34.111.43.213/api/register_build' \
+    'http://ccavijayapura.com/api/register_build' \
     -H 'accept: application/json' \
     -H 'Content-Type: multipart/form-data' \
     -F "app_id=$APP_ID" \

@@ -58,6 +58,7 @@ class PlayerBottomBar extends StatelessWidget {
               colors: videoStyle.progressIndicatorColors ??
                   const VideoProgressColors(
                     playedColor: Color.fromARGB(250, 0, 255, 112),
+                    bufferedColor: Color.fromARGB(76, 0, 255, 110),
                   ),
               padding: videoStyle.progressIndicatorPadding ?? EdgeInsets.zero,
             ),

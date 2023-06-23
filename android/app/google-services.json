@@ -22,19 +22,19 @@
           }
         },
         {
-          "client_id": "201658062957-6vrbqu91clk86uoqmcfffiiolihuu6rg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.cca_vijayapura.academy",
-            "certificate_hash": "162e5dab3c559da1adbfaf26334a23bad9d05565"
-          }
-        },
-        {
           "client_id": "201658062957-9vrpvdhckksq7vnl9t5403efv1fsm86p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.cca_vijayapura.academy",
             "certificate_hash": "313c2eac0eaf79df2307f483b8db8578c0e9770e"
+          }
+        },
+        {
+          "client_id": "201658062957-ftt21b7g3431uhhcsrn2te7ddjqv08qp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cca_vijayapura.academy",
+            "certificate_hash": "162e5dab3c559da1adbfaf26334a23bad9d05565"
           }
         },
         {

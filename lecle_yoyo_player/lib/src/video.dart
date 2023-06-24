@@ -264,6 +264,8 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
   bool firstTimeVideoPlayed = false;
 
+  bool isBuffering = false;
+
   @override
   void initState() {
     super.initState();
@@ -289,7 +291,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
           fullScr = true;
           SystemChrome.setEnabledSystemUIMode(
             SystemUiMode.manual,
-            overlays: [SystemUiOverlay.bottom],
+            overlays: [],
           );
         } else if (orientation == Orientation.portrait) {
           // Portrait screen
@@ -355,7 +357,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             aspectRatio: fullScreen
                 ? MediaQuery.of(context).size.calculateAspectRatio()
                 : widget.aspectRatio,
-            child: controller.value.isInitialized
+            child: firstTimeVideoPlayed && controller.value.isInitialized
                 ? Stack(
                     children: <Widget>[
                       GestureDetector(
@@ -390,7 +392,27 @@ class _YoYoPlayerState extends State<YoYoPlayer>
       liveDirectButton(),
       bottomBar(),
       // m3u8List(),
+      bufferingLoader(),
     ];
+  }
+
+  Widget bufferingLoader() {
+    if (!isBuffering) return const SizedBox();
+    return const Positioned.fill(
+      child: VideoLoading(
+        loadingStyle: VideoLoadingStyle(
+          loading: Center(
+            child: Text(
+              "Buffering...",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   /// Video player ActionBar
@@ -625,12 +647,40 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         widget.onPlayingVideo?.call("M3U8");
 
         print("urlEnd: M3U8");
-        videoControlSetup(url, null);
-        getM3U8(url);
+        if (widget.defaultQualityToBeHeigh) {
+          getM3U8(url).then((value) {
+            if (!firstTimeVideoPlayed && widget.defaultQualityToBeHeigh) {
+              final hq = yoyo.where((element) => element.isHightQuality).first;
+              if (m3u8Quality != hq.dataQuality) {
+                setState(() {
+                  m3u8Quality = hq.dataQuality ?? m3u8Quality;
+                });
+                onSelectQuality(hq);
+              }
+            }
+          });
+        } else {
+          videoControlSetup(url, null);
+          getM3U8(url);
+        }
       } else {
         print("urlEnd: null");
-        videoControlSetup(url, null);
-        getM3U8(url);
+        if (widget.defaultQualityToBeHeigh) {
+          getM3U8(url).then((value) {
+            if (!firstTimeVideoPlayed && widget.defaultQualityToBeHeigh) {
+              final hq = yoyo.where((element) => element.isHightQuality).first;
+              if (m3u8Quality != hq.dataQuality) {
+                setState(() {
+                  m3u8Quality = hq.dataQuality ?? m3u8Quality;
+                });
+                onSelectQuality(hq);
+              }
+            }
+          });
+        } else {
+          videoControlSetup(url, null);
+          getM3U8(url);
+        }
       }
       print("--- Current Video Status ---\noffline : $isOffline");
     } else {
@@ -645,13 +695,13 @@ class _YoYoPlayerState extends State<YoYoPlayer>
   }
 
   /// M3U8 Data Setup
-  void getM3U8(String videoUrl) {
+  Future getM3U8(String videoUrl) {
     if (yoyo.isNotEmpty) {
       print("${yoyo.length} : data start clean");
       m3u8Clean();
     }
     print("---- m3u8 fitch start ----\n$videoUrl\n--- please wait –––");
-    m3u8Video(videoUrl);
+    return m3u8Video(videoUrl);
   }
 
   Future<M3U8s?> m3u8Video(String? videoUrl) async {
@@ -708,10 +758,15 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             orderedQuality[e.value] = qualityWeight++;
             highestQuality = e.value;
           });
+        Map<String, bool> hasResolution = {};
 
         matches.forEach(
           (RegExpMatch regExpMatch) async {
             String quality = (regExpMatch.group(1)).toString();
+            if (hasResolution[quality] != null) {
+              return;
+            }
+            hasResolution[quality] = true;
             String sourceURL = (regExpMatch.group(3)).toString();
             final netRegex = RegExp(RegexResponse.regexHTTP);
             final netRegex2 = RegExp(RegexResponse.regexURL);
@@ -804,16 +859,19 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
 // Init video controller
   void videoControlSetup(String? url, Duration? lastPlayedPos) async {
-    videoInit(url);
-
-    if (lastPlayedPos != null) {
-      controller.seekTo(lastPlayedPos);
+    if (firstTimeVideoPlayed && controller.value.isInitialized) {
+      controller.dispose();
     }
-    controller.addListener(listener);
-    if (widget.autoPlayVideoAfterInit) {
-      controller.play();
-    }
-    widget.onVideoInitCompleted?.call(controller);
+    videoInit(url).then((value) {
+      if (lastPlayedPos != null) {
+        controller.seekTo(lastPlayedPos);
+      }
+      controller.addListener(listener);
+      if (widget.autoPlayVideoAfterInit) {
+        controller.play();
+      }
+      widget.onVideoInitCompleted?.call(controller);
+    });
   }
 
 // Video listener
@@ -851,6 +909,13 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         setState(() {});
       }
     }
+    final temp =
+        controller.value.isBuffering && controller.value.buffered.isNotEmpty;
+    if (temp != isBuffering && mounted) {
+      setState(() {
+        isBuffering = temp;
+      });
+    }
   }
 
   void createHideControlBarTimer() {
@@ -858,7 +923,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     showTime = Timer(const Duration(milliseconds: 5000), () {
       // if (controller != null && controller.value.isPlaying) {
       if (controller.value.isPlaying) {
-        if (showMenu) {
+        if (showMenu && mounted) {
           setState(() {
             showMenu = false;
             m3u8Show = false;
@@ -917,7 +982,8 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     setState(() {});
   }
 
-  void videoInit(String? url) {
+  Future videoInit(String? url) {
+    Completer c = Completer();
     if (isOffline == false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (widget.onLoad != null) {
@@ -943,6 +1009,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             if (widget.onLoad != null) {
               widget.onLoad!(true);
             }
+            c.complete();
           });
       } else if (playType == "MKV") {
         controller = VideoPlayerController.network(
@@ -959,6 +1026,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             if (widget.onLoad != null) {
               widget.onLoad!(true);
             }
+            c.complete();
           });
       } else if (playType == "HLS") {
         controller = VideoPlayerController.network(
@@ -985,6 +1053,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             setState(() {
               firstTimeVideoPlayed = true;
             });
+            c.complete();
           }).catchError((e) {
             if (!hasInitError) {
               videoControlSetup(widget.url, lastPlayedPos);
@@ -994,6 +1063,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
               m3u8Quality = "Auto";
             });
             widget.onLoad!(true);
+            c.completeError(e);
           });
       }
     } else {
@@ -1006,10 +1076,16 @@ class _YoYoPlayerState extends State<YoYoPlayer>
       )..initialize().then((value) {
           setState(() => hasInitError = false);
           seekToLastPlayingPosition();
+          setState(() {
+            firstTimeVideoPlayed = true;
+          });
+          c.complete();
         }).catchError((e) {
           setState(() => hasInitError = true);
+          c.completeError(e);
         });
     }
+    return c.future;
   }
 
   void _navigateLocally(context) async {
@@ -1030,10 +1106,12 @@ class _YoYoPlayerState extends State<YoYoPlayer>
   }
 
   void onSelectQuality(M3U8Data data) async {
-    lastPlayedPos = await controller.position;
+    if (firstTimeVideoPlayed && controller.value.isInitialized) {
+      lastPlayedPos = await controller.position;
 
-    if (controller.value.isPlaying) {
-      await controller.pause();
+      if (controller.value.isPlaying) {
+        await controller.pause();
+      }
     }
 
     if (data.dataQuality == "Auto") {

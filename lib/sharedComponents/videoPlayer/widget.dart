@@ -63,7 +63,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         videoLoadingStyle: const VideoLoadingStyle(
           loading: Center(
             child: Text(
-              "Loading",
+              "Loading...",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 30,
@@ -85,7 +85,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
           print('Cache file error ::: $error');
         },
         onFullScreen: (value) {
-          if (!value) {
+          if (widget.fullscreen && !value) {
             Navigator.pop(context);
           }
           // setState(() {

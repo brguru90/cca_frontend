@@ -5,6 +5,7 @@ import 'package:cca_vijayapura/services/secure_store.dart';
 import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:cca_vijayapura/sharedComponents/orgBanner/widget.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -22,6 +23,16 @@ class _AccountScreenState extends State<AccountScreen> {
       await storage.delete(key: "cookies");
       Navigator.pushReplacementNamed(context, "/");
     }).catchError((e) => print(e));
+  }
+
+  Uri FullURI = Uri.parse(
+      """${const String.fromEnvironment("SERVER_PROTOCOL")}://${const String.fromEnvironment("SERVER_HOST")}:${const String.fromEnvironment("SERVER_PORT")}""");
+
+  void _launchURL(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $urlString');
+    }
   }
 
   @override
@@ -66,19 +77,31 @@ class _AccountScreenState extends State<AccountScreen> {
                               const SizedBox(height: 20),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
+                                children: [
+                                  const Text(
                                     "Malghan building Meenakshi chowk Vijayapura, 586101",
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 39, 39, 39),
                                       fontSize: 18,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     "Email: nimmachanakya.shree@gmail.com",
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 39, 39, 39),
                                       fontSize: 18,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () =>
+                                        _launchURL("$FullURI/#/privacy_policy"),
+                                    child: const Text(
+                                      "View privacy policy",
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 39, 39, 39),
+                                          fontSize: 18,
+                                          decoration: TextDecoration.underline),
                                     ),
                                   ),
                                 ],

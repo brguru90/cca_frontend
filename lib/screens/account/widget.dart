@@ -1,9 +1,11 @@
 import 'package:cca_vijayapura/screens/home/bottomNavBar.dart';
 import 'package:cca_vijayapura/screens/home/header.dart';
+import 'package:cca_vijayapura/services/auth.dart';
 import 'package:cca_vijayapura/services/http_request.dart';
 import 'package:cca_vijayapura/services/secure_store.dart';
 import 'package:cca_vijayapura/services/temp_store.dart';
 import 'package:cca_vijayapura/sharedComponents/orgBanner/widget.dart';
+import 'package:cca_vijayapura/sharedComponents/toastMessages/toastMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,6 +21,11 @@ class _AccountScreenState extends State<AccountScreen> {
     exeFetch(
       uri: "/api/user/logout/",
     ).then((value) async {
+      try {
+        await authSignOut();
+      } catch (e) {
+        ToastMessage.error(e.toString());
+      }
       temp_store["cookies"] = null;
       await storage.delete(key: "cookies");
       Navigator.pushReplacementNamed(context, "/");

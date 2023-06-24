@@ -39,7 +39,7 @@ class _WatchVideoState extends State<WatchVideo> {
           child: videoData != null && videoData!.paid
               ? CustomVideoPlayer(
                   videoUrl: "$FullURI${videoData!.linkToVideoStream}",
-                  fullscreen: false,
+                  fullscreen: true,
                 )
               : const SizedBox(),
         ),

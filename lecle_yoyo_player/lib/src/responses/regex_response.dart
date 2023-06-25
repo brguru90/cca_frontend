@@ -37,6 +37,8 @@ class RegexResponse {
   static const String regexURL = r'(.*)\r?\/';
 
   /// regexM3U8Resolution
+  // static const String regexM3U8Resolution =
+  //     r"#EXT-X-STREAM-INF:(?:.*,RESOLUTION=(\d+x\d+))?,?(.*)\r?\n(.*)";
   static const String regexM3U8Resolution =
-      r"#EXT-X-STREAM-INF:(?:.*,RESOLUTION=(\d+x\d+))?,?(.*)\r?\n(.*)";
+      r"#EXT-X-STREAM-INF:(?:.*BANDWIDTH=(\d+),RESOLUTION=(\d+x\d+))?,?(.*)\r?\n(.*)";
 }

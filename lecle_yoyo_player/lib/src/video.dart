@@ -284,8 +284,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     WidgetsBinding.instance.addPostFrameCallback((callback) {
       if (!mounted) return;
       WidgetsBinding.instance.addPersistentFrameCallback((callback) {
-        i++;
-        if (i % 10 != 0) {
+        if (i++ % 10 != 0) {
           return;
         }
         i = 0;
@@ -749,7 +748,8 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
         Map<int, String> mappedQuality = {};
         matches.forEach((RegExpMatch regExpMatch) async {
-          String quality = (regExpMatch.group(1)).toString();
+          String quality =
+              "${regExpMatch.group(2) ?? ""} ${(int.parse(regExpMatch.group(1) ?? "0") / (1024 * 1024)).toStringAsFixed(1)}MBPS";
           int qualityWidth =
               int.parse((regExpMatch.group(1)).toString().split("x")[0]);
           mappedQuality[qualityWidth] = quality;
@@ -768,12 +768,13 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
         matches.forEach(
           (RegExpMatch regExpMatch) async {
-            String quality = (regExpMatch.group(1)).toString();
+            String quality =
+                "${regExpMatch.group(2) ?? ""} ${(int.parse(regExpMatch.group(1) ?? "0") / (1024 * 1024)).toStringAsFixed(1)}MBPS";
             if (hasResolution[quality] != null) {
               return;
             }
             hasResolution[quality] = true;
-            String sourceURL = (regExpMatch.group(3)).toString();
+            String sourceURL = (regExpMatch.group(4)).toString();
             final netRegex = RegExp(RegexResponse.regexHTTP);
             final netRegex2 = RegExp(RegexResponse.regexURL);
             final isNetwork = netRegex.hasMatch(sourceURL);

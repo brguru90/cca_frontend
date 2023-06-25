@@ -751,7 +751,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
           String quality =
               "${regExpMatch.group(2) ?? ""} ${(int.parse(regExpMatch.group(1) ?? "0") / (1024 * 1024)).toStringAsFixed(1)}MBPS";
           int qualityWidth =
-              int.parse((regExpMatch.group(1)).toString().split("x")[0]);
+              int.parse((regExpMatch.group(2)).toString().split("x")[0]);
           mappedQuality[qualityWidth] = quality;
         });
 

@@ -280,9 +280,15 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     controlBottomBarAnimation = Tween(begin: -(36.0 + 0.0 * 2), end: 0.0)
         .animate(controlBarAnimationController);
 
+    int i = 0;
     WidgetsBinding.instance.addPostFrameCallback((callback) {
+      if (!mounted) return;
       WidgetsBinding.instance.addPersistentFrameCallback((callback) {
-        if (!mounted) return;
+        i++;
+        if (i % 10 != 0) {
+          return;
+        }
+        i = 0;
         var orientation = MediaQuery.of(context).orientation;
         bool? fullScr;
 
@@ -859,10 +865,11 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
 // Init video controller
   void videoControlSetup(String? url, Duration? lastPlayedPos) async {
-    if (firstTimeVideoPlayed && controller.value.isInitialized) {
+    try {
       controller.dispose();
-    }
-    videoInit(url).then((value) {
+    } catch (e) {}
+    try {
+      await videoInit(url);
       if (lastPlayedPos != null) {
         controller.seekTo(lastPlayedPos);
       }
@@ -871,11 +878,12 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         controller.play();
       }
       widget.onVideoInitCompleted?.call(controller);
-    });
+    } catch (e) {}
   }
 
 // Video listener
   void listener() async {
+    if (!mounted) return;
     if (widget.videoStyle.showLiveDirectButton) {
       if (controller.value.position != controller.value.duration) {
         if (isAtLivePosition) {
@@ -896,22 +904,25 @@ class _YoYoPlayerState extends State<YoYoPlayer>
       if (!await Wakelock.enabled) {
         await Wakelock.enable();
       }
-
-      setState(() {
-        videoDuration = controller.value.duration.convertDurationToString();
-        videoSeek = controller.value.position.convertDurationToString();
-        videoSeekSecond = controller.value.position.inSeconds.toDouble();
-        videoDurationSecond = controller.value.duration.inSeconds.toDouble();
-      });
+      if (mounted) {
+        setState(() {
+          videoDuration = controller.value.duration.convertDurationToString();
+          videoSeek = controller.value.position.convertDurationToString();
+          videoSeekSecond = controller.value.position.inSeconds.toDouble();
+          videoDurationSecond = controller.value.duration.inSeconds.toDouble();
+        });
+      }
     } else {
       if (await Wakelock.enabled) {
         await Wakelock.disable();
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     }
     final temp =
         controller.value.isBuffering && controller.value.buffered.isNotEmpty;
-    if (temp != isBuffering && mounted) {
+    if (temp != isBuffering) {
       setState(() {
         isBuffering = temp;
       });

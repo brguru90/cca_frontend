@@ -233,6 +233,7 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                                     image:
                                         "$base_url${video.linkToVideoPreviewImage}",
                                     fit: BoxFit.cover,
+                                    filterQuality: FilterQuality.medium,
                                   ),
                                 ),
                               ),

@@ -266,6 +266,41 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
   bool isBuffering = false;
 
+  int i = 0;
+  void orientationCheck() {
+    if (!mounted) return;
+    if (i++ % 60 != 0) {
+      return;
+    }
+    i = 0;
+    var orientation = MediaQuery.of(context).orientation;
+    bool? fullScr;
+
+    if (orientation == Orientation.landscape) {
+      // Horizontal screen
+      fullScr = true;
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: [],
+      );
+    } else if (orientation == Orientation.portrait) {
+      // Portrait screen
+      fullScr = false;
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: SystemUiOverlay.values,
+      );
+    }
+
+    if (fullScr != fullScreen) {
+      setState(() {
+        fullScreen = !fullScreen;
+        _navigateLocally(context);
+        widget.onFullScreen?.call(fullScreen);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -280,44 +315,45 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     controlBottomBarAnimation = Tween(begin: -(36.0 + 0.0 * 2), end: 0.0)
         .animate(controlBarAnimationController);
 
-    int i = 0;
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
-      if (!mounted) return;
-      WidgetsBinding.instance.addPersistentFrameCallback((callback) {
-        if (i++ % 10 != 0) {
-          return;
-        }
-        i = 0;
-        var orientation = MediaQuery.of(context).orientation;
-        bool? fullScr;
+    // int i = 0;
+    // WidgetsBinding.instance.addPostFrameCallback((callback) {
+    //   if (!mounted) return;
+    //   WidgetsBinding.instance.addPersistentFrameCallback((callback) {
+    //     if (!mounted) return;
+    //     if (i++ % 10 != 0) {
+    //       return;
+    //     }
+    //     i = 0;
+    //     var orientation = MediaQuery.of(context).orientation;
+    //     bool? fullScr;
 
-        if (orientation == Orientation.landscape) {
-          // Horizontal screen
-          fullScr = true;
-          SystemChrome.setEnabledSystemUIMode(
-            SystemUiMode.manual,
-            overlays: [],
-          );
-        } else if (orientation == Orientation.portrait) {
-          // Portrait screen
-          fullScr = false;
-          SystemChrome.setEnabledSystemUIMode(
-            SystemUiMode.manual,
-            overlays: SystemUiOverlay.values,
-          );
-        }
+    //     if (orientation == Orientation.landscape) {
+    //       // Horizontal screen
+    //       fullScr = true;
+    //       SystemChrome.setEnabledSystemUIMode(
+    //         SystemUiMode.manual,
+    //         overlays: [],
+    //       );
+    //     } else if (orientation == Orientation.portrait) {
+    //       // Portrait screen
+    //       fullScr = false;
+    //       SystemChrome.setEnabledSystemUIMode(
+    //         SystemUiMode.manual,
+    //         overlays: SystemUiOverlay.values,
+    //       );
+    //     }
 
-        if (fullScr != fullScreen) {
-          setState(() {
-            fullScreen = !fullScreen;
-            _navigateLocally(context);
-            widget.onFullScreen?.call(fullScreen);
-          });
-        }
+    //     if (fullScr != fullScreen) {
+    //       setState(() {
+    //         fullScreen = !fullScreen;
+    //         _navigateLocally(context);
+    //         widget.onFullScreen?.call(fullScreen);
+    //       });
+    //     }
 
-        WidgetsBinding.instance.scheduleFrame();
-      });
-    });
+    //     WidgetsBinding.instance.scheduleFrame();
+    //   });
+    // });
 
     // SystemChrome.setPreferredOrientations([
     //   DeviceOrientation.portraitUp,
@@ -885,6 +921,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 // Video listener
   void listener() async {
     if (!mounted) return;
+    orientationCheck();
     if (widget.videoStyle.showLiveDirectButton) {
       if (controller.value.position != controller.value.duration) {
         if (isAtLivePosition) {
@@ -939,7 +976,9 @@ class _YoYoPlayerState extends State<YoYoPlayer>
           setState(() {
             showMenu = false;
             m3u8Show = false;
-            controlBarAnimationController.reverse();
+            try {
+              controlBarAnimationController.reverse();
+            } catch (e) {}
 
             widget.onShowMenu?.call(showMenu, m3u8Show);
             removeOverlay();

@@ -378,7 +378,10 @@ class _YoYoPlayerState extends State<YoYoPlayer>
   @override
   void dispose() {
     m3u8Clean();
-    controller.dispose();
+    ScreenUtils.toggleFullScreen(true);
+    if (firstTimeVideoPlayed) {
+      controller.dispose();
+    }
     controlBarAnimationController.dispose();
     super.dispose();
   }
@@ -690,7 +693,9 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         print("urlEnd: M3U8");
         if (widget.defaultQualityToBeHeigh) {
           getM3U8(url).then((value) {
-            if (!firstTimeVideoPlayed && widget.defaultQualityToBeHeigh) {
+            if (!firstTimeVideoPlayed &&
+                widget.defaultQualityToBeHeigh &&
+                yoyo.length > 1) {
               final hq = yoyo.where((element) => element.isHightQuality).first;
               if (m3u8Quality != hq.dataQuality) {
                 setState(() {
@@ -708,7 +713,9 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         print("urlEnd: null");
         if (widget.defaultQualityToBeHeigh) {
           getM3U8(url).then((value) {
-            if (!firstTimeVideoPlayed && widget.defaultQualityToBeHeigh) {
+            if (!firstTimeVideoPlayed &&
+                widget.defaultQualityToBeHeigh &&
+                yoyo.length > 1) {
               final hq = yoyo.where((element) => element.isHightQuality).first;
               if (m3u8Quality != hq.dataQuality) {
                 setState(() {
@@ -994,6 +1001,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
   void toggleControls() {
     clearHideControlBarTimer();
+    if (!firstTimeVideoPlayed) return;
 
     if (!showMenu) {
       setState(() {

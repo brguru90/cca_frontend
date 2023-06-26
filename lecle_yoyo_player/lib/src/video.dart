@@ -387,10 +387,13 @@ class _YoYoPlayerState extends State<YoYoPlayer>
   void dispose() {
     m3u8Clean();
     ScreenUtils.toggleFullScreen(true);
-    if (firstTimeVideoPlayed) {
+    try {
       controller.dispose();
-    }
+    } catch (e) {}
     controlBarAnimationController.dispose();
+    try {
+      removeOverlay();
+    } catch (e) {}
     super.dispose();
   }
 
@@ -433,14 +436,27 @@ class _YoYoPlayerState extends State<YoYoPlayer>
                   )
                 : Stack(
                     children: [
-                      Center(
+                      Positioned.fill(
                         child: GestureDetector(
-                          onDoubleTap: () {
-                            togglePlay();
-                            removeOverlay();
+                          onTap: () {
+                            if (yoyo.length > 1) {
+                              setState(() {
+                                showMenu = !showMenu;
+                              });
+                            }
                           },
-                          child: VideoLoading(
-                              loadingStyle: widget.videoLoadingStyle),
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                VideoLoading(
+                                    loadingStyle: widget.videoLoadingStyle),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       actionBar(),

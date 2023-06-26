@@ -42,6 +42,8 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         displayFullScreenAfterInit: widget.fullscreen,
         url: widget.videoUrl,
         videoStyle: const VideoStyle(
+          qualityOptionsPadding:
+              EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           qualityStyle: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w500,

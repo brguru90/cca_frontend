@@ -137,6 +137,8 @@ class YoYoPlayer extends StatefulWidget {
   /// Like setting the audio mode to mix.
   final VideoPlayerOptions? videoPlayerOptions;
 
+  final void Function()? onBack;
+
   ///
   /// ```dart
   /// YoYoPlayer(
@@ -175,6 +177,7 @@ class YoYoPlayer extends StatefulWidget {
     this.videoPlayerOptions,
     this.onLiveDirectTap,
     this.backgroundColor = Colors.black,
+    this.onBack,
   }) : super(key: key);
 
   @override
@@ -307,6 +310,11 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
     urlCheck(widget.url);
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      orientationCheck();
+      Timer(const Duration(milliseconds: 400), orientationCheck);
+    });
+
     /// Control bar animation
     controlBarAnimationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
@@ -423,7 +431,21 @@ class _YoYoPlayerState extends State<YoYoPlayer>
                       ...videoBuiltInChildren(),
                     ],
                   )
-                : VideoLoading(loadingStyle: widget.videoLoadingStyle),
+                : Stack(
+                    children: [
+                      Center(
+                        child: GestureDetector(
+                          onDoubleTap: () {
+                            togglePlay();
+                            removeOverlay();
+                          },
+                          child: VideoLoading(
+                              loadingStyle: widget.videoLoadingStyle),
+                        ),
+                      ),
+                      actionBar(),
+                    ],
+                  ),
           ),
         ),
       ),
@@ -693,6 +715,9 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         print("urlEnd: M3U8");
         if (widget.defaultQualityToBeHeigh) {
           getM3U8(url).then((value) {
+            setState(() {
+              showMenu = true;
+            });
             if (!firstTimeVideoPlayed &&
                 widget.defaultQualityToBeHeigh &&
                 yoyo.length > 1) {
@@ -713,6 +738,9 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         print("urlEnd: null");
         if (widget.defaultQualityToBeHeigh) {
           getM3U8(url).then((value) {
+            setState(() {
+              showMenu = true;
+            });
             if (!firstTimeVideoPlayed &&
                 widget.defaultQualityToBeHeigh &&
                 yoyo.length > 1) {
@@ -1102,7 +1130,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
             }
             if (!firstTimeVideoPlayed && widget.defaultQualityToBeHeigh) {
               final hq = yoyo.where((element) => element.isHightQuality).first;
-              if (m3u8Quality != hq.dataQuality) {
+              if (m3u8Quality == "Auto") {
                 setState(() {
                   m3u8Quality = hq.dataQuality ?? m3u8Quality;
                 });
@@ -1149,8 +1177,12 @@ class _YoYoPlayerState extends State<YoYoPlayer>
 
   void _navigateLocally(context) async {
     if (!fullScreen) {
-      if (ModalRoute.of(context)?.willHandlePopInternally ?? false) {
-        Navigator.of(context).pop();
+      if (widget.onBack != null) {
+        widget.onBack!();
+      } else {
+        if (ModalRoute.of(context)?.willHandlePopInternally ?? false) {
+          Navigator.of(context).pop();
+        }
       }
       return;
     }

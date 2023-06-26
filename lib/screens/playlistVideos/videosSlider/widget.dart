@@ -95,10 +95,15 @@ class _VideosSliderState extends State<VideosSlider> {
                   ToastMessage.warning("Video link not available yet");
                   return;
                 }
-                Navigator.pushNamed(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
                   '/watch_video',
-                  arguments: video,
+                  (Route<dynamic> route) => false,
+                  arguments: {
+                    "video_data": video,
+                    "backToRooute": "/playlist_videos",
+                    "backRouteArgs": ModalRoute.of(context)!.settings.arguments,
+                  },
                 );
               },
               child: SizedBox(
@@ -118,9 +123,10 @@ class _VideosSliderState extends State<VideosSlider> {
                               placeholder: "assets/images/loading.png",
                               image: imagePreviewUrl,
                               fit: BoxFit.cover,
-                              filterQuality: FilterQuality.medium,
-                              // imageCacheHeight: 480,
-                              // imageCacheWidth: 360,
+                              filterQuality: FilterQuality.low,
+                              height: 400,
+                              imageCacheHeight: 400,
+                              placeholderCacheHeight: 400,
                             ),
                           ),
                         ),

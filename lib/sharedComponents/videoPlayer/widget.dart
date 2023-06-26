@@ -4,8 +4,9 @@ import 'package:lecle_yoyo_player/lecle_yoyo_player.dart';
 class CustomVideoPlayer extends StatefulWidget {
   final String videoUrl;
   final bool fullscreen;
+  final void Function()? onBack;
   const CustomVideoPlayer(
-      {Key? key, required this.videoUrl, this.fullscreen = false})
+      {Key? key, required this.videoUrl, this.fullscreen = false, this.onBack})
       : super(key: key);
 
   @override
@@ -36,6 +37,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
             isLoaded = loaded;
           })
         },
+        onBack: widget.onBack,
         aspectRatio: 16 / 9,
         displayFullScreenAfterInit: widget.fullscreen,
         url: widget.videoUrl,
@@ -86,13 +88,10 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
         },
         onFullScreen: (value) {
           if (widget.fullscreen && !value) {
-            Navigator.pop(context);
+            if (widget.onBack != null) {
+              widget.onBack!();
+            }
           }
-          // setState(() {
-          //   if (fullscreen != value) {
-          //     fullscreen = value;
-          //   }
-          // });
         },
       ),
     );

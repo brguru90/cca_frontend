@@ -189,19 +189,23 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                       return;
                     }
                     if (widget.paid) {
-                      Navigator.pushNamed(
+                      Navigator.pushNamedAndRemoveUntil(
                         context,
                         '/watch_video',
-                        arguments: VideoLists(
-                          id: video.id,
-                          title: video.title,
-                          description: "",
-                          createdBy: "",
-                          linkToVideoPreviewImage:
-                              video.linkToVideoPreviewImage,
-                          linkToVideoStream: video.linkToVideoStream,
-                          paid: widget.paid,
-                        ),
+                        (Route<dynamic> route) => false,
+                        arguments: {
+                          "video_data": VideoLists(
+                            id: video.id,
+                            title: video.title,
+                            description: "",
+                            createdBy: "",
+                            linkToVideoPreviewImage:
+                                video.linkToVideoPreviewImage,
+                            linkToVideoStream: video.linkToVideoStream,
+                            paid: widget.paid,
+                          ),
+                          "backToRooute": "/course_playlist"
+                        },
                       );
                     } else {
                       ToastMessage.warning("Playlist is not purchased");
@@ -234,6 +238,9 @@ class _PlaylistSliderState extends State<PlaylistSlider> {
                                         "$base_url${video.linkToVideoPreviewImage}",
                                     fit: BoxFit.cover,
                                     filterQuality: FilterQuality.medium,
+                                    height: 2000,
+                                    imageCacheHeight: 2000,
+                                    placeholderCacheHeight: 2000,
                                   ),
                                 ),
                               ),

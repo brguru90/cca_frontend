@@ -1,4 +1,5 @@
 import 'package:cca_vijayapura/screens/playlistVideos/videosSlider/widget.dart';
+import 'package:cca_vijayapura/sharedComponents/NestedWillPopScope/widget.dart';
 import 'package:cca_vijayapura/sharedComponents/videoPlayer/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +13,31 @@ class WatchVideo extends StatefulWidget {
 class _WatchVideoState extends State<WatchVideo> {
   VideoLists? videoData;
 
+  Map routeArguments = {};
+
   void fetchPlaylist() {
-    final video = ModalRoute.of(context)!.settings.arguments as VideoLists;
+    final video = routeArguments["video_data"] as VideoLists;
     setState(() {
       videoData = video;
     });
+  }
+
+  bool onBack() {
+    if (routeArguments["backToRooute"] != null) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        routeArguments["backToRooute"],
+        (Route<dynamic> route) => false,
+        arguments: routeArguments["backRouteArgs"],
+      );
+      return false;
+    }
+    //  else {
+    //   if (ModalRoute.of(context)?.willHandlePopInternally ?? false) {
+    //     Navigator.of(context).pop();
+    //   }
+    // }
+    return true;
   }
 
   @override
@@ -24,6 +45,9 @@ class _WatchVideoState extends State<WatchVideo> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        routeArguments = ModalRoute.of(context)!.settings.arguments as Map;
+      });
       fetchPlaylist();
     });
   }
@@ -35,13 +59,19 @@ class _WatchVideoState extends State<WatchVideo> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          child: videoData != null && videoData!.paid
-              ? CustomVideoPlayer(
-                  videoUrl: "$FullURI${videoData!.linkToVideoStream}",
-                  fullscreen: true,
-                )
-              : const SizedBox(),
+        body: NestedWillPopScope(
+          onWillPop: (data) async {
+            return Future.value(onBack());
+          },
+          child: Container(
+            child: videoData != null && videoData!.paid
+                ? CustomVideoPlayer(
+                    videoUrl: "$FullURI${videoData!.linkToVideoStream}",
+                    fullscreen: true,
+                    onBack: onBack,
+                  )
+                : const SizedBox(),
+          ),
         ),
       ),
     );

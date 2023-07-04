@@ -836,7 +836,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         Map<int, String> mappedQuality = {};
         matches.forEach((RegExpMatch regExpMatch) async {
           String quality =
-              "${regExpMatch.group(2) ?? ""} ${(int.parse(regExpMatch.group(1) ?? "0") / (1024 * 1024)).toStringAsFixed(1)}MBPS";
+              "${regExpMatch.group(2) ?? ""} ${(int.parse(regExpMatch.group(1) ?? "0") / (1024 * 1024)).toStringAsFixed(2)}MBPS";
           int qualityWidth =
               int.parse((regExpMatch.group(2)).toString().split("x")[0]);
           mappedQuality[qualityWidth] = quality;
@@ -856,7 +856,7 @@ class _YoYoPlayerState extends State<YoYoPlayer>
         matches.forEach(
           (RegExpMatch regExpMatch) async {
             String quality =
-                "${regExpMatch.group(2) ?? ""} ${(int.parse(regExpMatch.group(1) ?? "0") / (1024 * 1024)).toStringAsFixed(1)}MBPS";
+                "${regExpMatch.group(2) ?? ""} ${(int.parse(regExpMatch.group(1) ?? "0") / (1024 * 1024)).toStringAsFixed(2)}MBPS";
             if (hasResolution[quality] != null) {
               return;
             }
